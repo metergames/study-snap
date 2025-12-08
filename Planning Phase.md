@@ -6,15 +6,11 @@
 
 #### 1. Understanding the Problem
 
-Students often struggle to organize and study large amounts of information effectively using physical notes or index cards, which are easily lost or damaged. The problem is the lack of a simple, digital tool that allows students to create custom decks of questions and answers, test themselves interactively and track which cards they know and which they miss. The solution requires an application that saves this data so students can pick up their study sessions exactly where they left off without losing progress. This ensures steady learning, refined for each user.
+The application will represent a study tool based on the concept of flashcards. It functions as a self-assessment system where users organize study material into specific subjects. The core mechanism involves presenting a question side of a card, allowing the user to recall the answer, and then revealing the answer side for verification. The system tracks the user's self-reported performance (correct or incorrect) during a session to provide a final score percentage, mimicking a real-world quiz environment.
 
 #### 2. Formulating the Problem
 
-To solve this, we will build a C# WPF Desktop Application. The problem consists of three key parts:
-
-- **Input:** The user creates Decks and adds Flashcards (Front/Back text) to them.
-- **Processing:** The app manages these lists, saves them to a local file and randomizes the cards for a Quiz Mode. It also calculates a simple score based on user self-assessment.
-- **Output:** The app visually displays the cards one by one, reveals the answer on command and provides a summary of the study session results.
+The study data will be represented as a collection of Decks, where each Deck contains a list of Flashcard objects holding two string values (Front and Back). User input will be captured to create these lists and modify them. During a study session, the order of cards within a Deck will be randomized using a shuffling algorithm. The application will maintain temporary counters for correct and incorrect answers during the session. Upon completion, the session statistics (score, date) will be calculated and stored persistently alongside the deck data to allow for historical tracking of performance.
 
 #### 3. Development
 
