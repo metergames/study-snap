@@ -24,5 +24,10 @@ namespace StudySnap
         {
             InitializeComponent();
         }
+
+        private void btnCreateDeck_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

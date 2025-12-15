@@ -5,8 +5,59 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudySnap"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="700" Width="875">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <!-- Title bar -->
+        <Rectangle Grid.Row="1" Grid.ColumnSpan="2" Fill="#F6F6F8"/>
+        <Label Content="StudySnap" Grid.Row="0" Grid.ColumnSpan="2"
+               VerticalAlignment="Center" FontSize="20"
+               FontFamily="Segoe UI Black" Margin="35,0,0,0"/>
+
+        <!--Deck Panel-->
+        <Rectangle Grid.Row="1" Grid.Column="0" Fill="White"
+                   RadiusX="25"
+                   RadiusY="25"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Stretch"
+                   Margin="20,20,15,20"
+                   />
+        <StackPanel Orientation="Vertical" Margin="35,35,30,35" Grid.Column="0" Grid.Row="1" >
+            <Label Content="My Decks"
+                   FontWeight="Bold"
+                   FontSize="18"
+                   VerticalAlignment="Top"/>
+            <Border Background="#F6F6F8" BorderBrush="#DDDDDE" BorderThickness="1"
+                    CornerRadius="12" Height="25" Margin="1,12,1,1">
+                <TextBox x:Name="txtbSearchBox" Background="Transparent"
+         BorderThickness="0" VerticalContentAlignment="Center"
+         Text="Search decks..." FontSize="9" Margin="15,1,1,1"/>
+            </Border>
+            <Border Background="#135BEC"
+                    CornerRadius="12" Height="25" Margin="1,10,1,1">
+                <Button x:Name="btnCreateDeck" Background="Transparent"
+                         BorderThickness="0" VerticalContentAlignment="Center"
+                         Content="Create Deck" FontSize="9" FontWeight="Bold" Margin="1" Click="btnCreateDeck_Click" Foreground="White"
+                         />
+            </Border>
+        </StackPanel>
+
+        <!--Deck Overview-->
+        <Rectangle Grid.Row="1" Grid.Column="1" Fill="White"
+           RadiusX="25"
+           RadiusY="25"
+           HorizontalAlignment="Stretch"
+           VerticalAlignment="Stretch"
+           Margin="20,20,15,20"
+           />
+        
     </Grid>
 </Window>
