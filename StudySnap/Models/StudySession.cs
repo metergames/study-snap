@@ -9,13 +9,10 @@ namespace StudySnap.Models
     /// </summary>
     public class StudySession
     {
-        // Data Fields
         private Deck _deck;
         private int _currentCardIndex;
         private int _correctCount;
-        
 
-        // Properties
         /// <summary>
         /// Gets the current deck in use.
         /// </summary>
@@ -24,6 +21,7 @@ namespace StudySnap.Models
             get { return _deck; }
             private set { _deck = value; }
         }
+
         /// <summary>
         /// Gets the index of the currently selected card.
         /// </summary>
@@ -32,6 +30,7 @@ namespace StudySnap.Models
             get { return _currentCardIndex; }
             private set { _currentCardIndex = value; }
         }
+
         /// <summary>
         /// Gets the number of correct answers recorded.
         /// </summary>
@@ -40,6 +39,7 @@ namespace StudySnap.Models
             get { return _correctCount; }
             private set { _correctCount = value; }
         }
+
         /// <summary>
         /// Gets the total number of cards currently in the deck.
         /// </summary>
@@ -48,7 +48,6 @@ namespace StudySnap.Models
             get { return _deck.Cards.Count; }
         }
 
-        // Constructor
         public StudySession (Deck deck)
         {
             if (deck == null)
@@ -57,10 +56,10 @@ namespace StudySnap.Models
             }
             CurrentDeck = deck;
             CurrentCardIndex = 0;
-            CorrectCount = 0;            
+            CorrectCount = 0;
             ShuffleDeck();
         }
-        // Methods
+
         /// <summary>
         /// Retrieves the next available flashcard in the current deck or null if there are no more cards to review.
         /// </summary>
@@ -73,6 +72,7 @@ namespace StudySnap.Models
             }
             return null;
         }
+
         /// <summary>
         /// Determines whether there are additional cards remaining in the collection.
         /// </summary>
@@ -81,6 +81,7 @@ namespace StudySnap.Models
         {
             return CurrentCardIndex < TotalCards;
         }
+
         /// <summary>
         /// Records the user's answer for the current card and advances to the next card.
         /// </summary>
@@ -93,6 +94,7 @@ namespace StudySnap.Models
             }
             CurrentCardIndex++;
         }
+
         /// <summary>
         /// Calculates the percentage score based on the number of correct answers and the total number of cards.
         /// </summary>
@@ -102,12 +104,13 @@ namespace StudySnap.Models
             if (TotalCards == 0) return 0;
             return (double)CorrectCount / TotalCards * 100;
         }
+
         /// <summary>
         /// Randomizes the order of the cards in the current deck.
         /// </summary>
         public void ShuffleDeck()
         {
-            if(CurrentDeck.Cards == null ||  CurrentDeck.Cards.Count <= 1)
+            if(CurrentDeck.Cards == null || CurrentDeck.Cards.Count <= 1)
             {
                 return;
             }
@@ -122,6 +125,7 @@ namespace StudySnap.Models
                 CurrentDeck.Cards[cardCount] = temp;
             }
         }
+
         /// <summary>
         /// Creates a new StudySessionResult instance representing the outcome of the current study session.
         /// </summary>

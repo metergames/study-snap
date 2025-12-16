@@ -73,14 +73,5 @@ namespace StudySnap.Models
             if (card != null)
                 Cards.Remove(card);
         }
-
-        /// <summary>
-        /// Returns total number of cards in the deck.
-        /// </summary>
-        /// <returns>Integer for count of cards</returns>
-        public int GetCardCount()
-        {
-            return Cards.Count;
-        }
     }
 }

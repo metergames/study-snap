@@ -2,6 +2,7 @@
  * 2492176 & 2466265
  * Project - Flashcard Study App
  */
+using StudySnap.Models;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,9 +21,40 @@ namespace StudySnap
     /// </summary>
     public partial class MainWindow : Window
     {
+        private DataRepository _repository;
+        private List<Deck> _decks;
+        private const string DECK_FILE_PATH = "C:\\Users\\User\\Desktop\\decks.json";
+
         public MainWindow()
         {
             InitializeComponent();
+
+            _repository = new DataRepository();
+            _decks = new List<Deck>();
+
+            RefreshDecks();
+        }
+
+        /// <summary>
+        /// Reloads the list of decks from the JSON file and updates the UI.
+        /// If there are no decks, show the welcome section and a label stating there are no decks.
+        /// </summary>
+        private void RefreshDecks()
+        {
+            _decks = _repository.LoadDecks(DECK_FILE_PATH);
+
+            if (_decks.Count == 0)
+            {
+                lstbDecks.ItemsSource = null;
+                lblNoDecks.Visibility = Visibility.Visible;
+                WelcomeSection.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                lblNoDecks.Visibility = Visibility.Collapsed;
+                WelcomeSection.Visibility = Visibility.Collapsed;
+                lstbDecks.ItemsSource = _decks;
+            }
         }
 
         private void CreateDeckClick(object sender, RoutedEventArgs e)
@@ -32,7 +64,7 @@ namespace StudySnap
 
         private void ExitButtonClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Clicked exit button");
+            Application.Current.Shutdown();
         }
 
         /// <summary>

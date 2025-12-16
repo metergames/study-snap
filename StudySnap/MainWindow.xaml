@@ -33,37 +33,97 @@
                    RadiusX="25" RadiusY="25" HorizontalAlignment="Stretch"
                    VerticalAlignment="Stretch" Margin="20,20,15,20"/>
 
-        <StackPanel Orientation="Vertical" Margin="35,35,30,35"
-                    Grid.Column="0" Grid.Row="1" >
+        <Grid Grid.Column="0" Grid.Row="1" Margin="35,35,30,35">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
             <Label Content="My Decks" FontWeight="Bold" FontSize="18"
-                   VerticalAlignment="Top"/>
+                   VerticalAlignment="Top" Grid.Row="0"/>
 
             <Border Background="#F6F6F8" BorderBrush="#DDDDDE"
                     BorderThickness="1" CornerRadius="15" Height="30"
-                    Margin="1,12,1,1">
+                    Margin="1,12,1,1" Grid.Row="1">
                 <TextBox x:Name="txtbSearchBox" Background="Transparent"
                          BorderThickness="0" VerticalContentAlignment="Center"
                          Text="Search decks..." FontSize="11"
                          Margin="15,1,1,1"/>
             </Border>
 
-            <Button Style="{StaticResource RoundedButton}"
+            <Button Grid.Row="2" Style="{StaticResource RoundedButton}"
                     Content="Create Deck" Height="30" BorderThickness="0"
                     Background="#135BEC" Foreground="White"
-                    FontSize="11" FontWeight="Bold" Margin="1,10,1,1"
+                    FontSize="11" FontWeight="Bold" Margin="1,10"
                     VerticalContentAlignment="Center" Click="CreateDeckClick"/>
+
+            <ListBox Grid.Row="3" x:Name="lstbDecks" SelectionMode="Single"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     ItemContainerStyle="{StaticResource DeckItemContainerStyle}"
+                     Background="Transparent" BorderThickness="0">
+
+                <ListBox.Resources>
+                    <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ModernScrollBarStyle}"/>
+                </ListBox.Resources>
+
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="258" Height="38">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border x:Name="icnBorder" Width="37.5" Height="37.5" Grid.Column="0"
+                                    CornerRadius="40" Background="#F3F4F6"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                                <!-- Icon -->
+                            </Border>
+
+                            <StackPanel VerticalAlignment="Center" Grid.Column="1"
+                                        HorizontalAlignment="Left" Margin="0,0,25,0">
+                                <TextBlock Text="{Binding Name}" FontSize="13"
+                                           FontWeight="Bold" Foreground="#1F2937"
+                                           TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                                           ToolTip="{Binding Name}" TextAlignment="Left"/>
+
+                                <TextBlock Text="{Binding Cards.Count, StringFormat='{}{0} cards'}"
+                                           FontSize="11" Foreground="#6B7280"
+                                           Margin="0,5,0,0" TextAlignment="Left"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                                <Setter TargetName="icnBorder" Property="Background" Value="#BCD0F9"/>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
             <TextBlock x:Name="lblNoDecks" Text="No decks found"
                        HorizontalAlignment="Center" Margin="0,50,0,0"
-                       Foreground="#9CA3AF" FontStyle="Italic"/>
-        </StackPanel>
+                       Foreground="#9CA3AF" FontStyle="Italic"
+                       Visibility="Collapsed" Grid.Row="3"/>
+        </Grid>
 
 
         <!-- Deck Overview -->
         <Rectangle Grid.Row="1" Grid.Column="1" Fill="White" RadiusX="25"
                    RadiusY="25" HorizontalAlignment="Stretch"
                    VerticalAlignment="Stretch" Margin="20,20,15,20"/>
-        
+
         <Grid x:Name="WelcomeSection" Grid.Row="1" Grid.Column="1">
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center" Orientation="Vertical"
@@ -135,7 +195,7 @@
                                        FontSize="16" Foreground="#4B5563"
                                        VerticalAlignment="Center" Margin="15,0,0,0"/>
                         </Grid>
-                        
+
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -162,10 +222,11 @@
                         Margin="1,10,1,1" VerticalContentAlignment="Center"
                         Click="CreateDeckClick"/>
             </StackPanel>
-            <Button Style="{StaticResource TextOnlyButton}"
-                    Content="Exit" HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom" Margin="0,0,40,40"
-                    Click="ExitButtonClick"/>
         </Grid>
+
+        <Button Style="{StaticResource TextOnlyButton}" Grid.Row="1"
+                Grid.Column="1" Content="Exit" HorizontalAlignment="Right"
+                VerticalAlignment="Bottom" Margin="0,0,40,40"
+                Click="ExitButtonClick"/>
     </Grid>
 </Window>
