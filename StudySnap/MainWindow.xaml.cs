@@ -25,9 +25,23 @@ namespace StudySnap
             InitializeComponent();
         }
 
-        private void btnCreateDeck_Click(object sender, RoutedEventArgs e)
+        private void CreateDeckClick(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show("Clicked create deck");
+        }
 
+        private void ExitButtonClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Clicked exit button");
+        }
+
+        /// <summary>
+        /// Allow window to be dragged around by holding anywhere.
+        /// </summary>
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
         }
     }
 }

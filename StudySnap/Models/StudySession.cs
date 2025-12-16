@@ -62,7 +62,7 @@ namespace StudySnap.Models
         }
         // Methods
         /// <summary>
-        /// Retrieves the next available flashcard in the current deck, or null if there are no more cards to review.
+        /// Retrieves the next available flashcard in the current deck or null if there are no more cards to review.
         /// </summary>
         /// <returns>The next Flashcard in the current deck to be reviewed or null if all cards have been reviewed.</returns>
         public Flashcard GetNextCard()
@@ -84,7 +84,7 @@ namespace StudySnap.Models
         /// <summary>
         /// Records the user's answer for the current card and advances to the next card.
         /// </summary>
-        /// <param name="isCorrect">true if the user's answer to the current card is correct, or false if not.</param>
+        /// <param name="isCorrect">true if the user's answer to the current card is correct or false if not.</param>
         public void RecordAnswer(bool isCorrect)
         {
             if (isCorrect)
