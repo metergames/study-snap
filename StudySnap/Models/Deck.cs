@@ -73,5 +73,11 @@ namespace StudySnap.Models
             if (card != null)
                 Cards.Remove(card);
         }
+
+        public string LastStudiedDisplay { get; set; } = "-";
+
+        public string BestScoreDisplay { get; set; } = "-";
+
+        public string AverageAccuracyDisplay { get; set; } = "-";
     }
 }

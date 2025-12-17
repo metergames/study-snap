@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="StudySnap" Height="800" Width="1000"
         WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown"
-        MinHeight="585" MinWidth="775">
+        MinHeight="585" MinWidth="908">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="325"/>
@@ -53,7 +53,7 @@
                          Margin="15,1,1,1"/>
             </Border>
 
-            <Button Grid.Row="2" Style="{StaticResource RoundedButton}"
+            <Button Grid.Row="2" Style="{StaticResource RoundedButton15}"
                     Content="Create Deck" Height="30" BorderThickness="0"
                     Background="#135BEC" Foreground="White"
                     FontSize="11" FontWeight="Bold" Margin="1,10"
@@ -115,7 +115,7 @@
             <TextBlock x:Name="lblNoDecks" Text="No decks found"
                        HorizontalAlignment="Center" Margin="0,50,0,0"
                        Foreground="#9CA3AF" FontStyle="Italic"
-                       Visibility="Collapsed" Grid.Row="3"/>
+                       Grid.Row="3"/>
         </Grid>
 
 
@@ -215,13 +215,102 @@
                     </StackPanel>
                 </Border>
 
-                <Button Style="{StaticResource RoundedButton}"
+                <Button Style="{StaticResource RoundedButton15}"
                         Content="Create Deck" Height="30" Width="100"
                         BorderThickness="0" Background="#135BEC"
                         Foreground="White" FontSize="11" FontWeight="Bold"
                         Margin="1,10,1,1" VerticalContentAlignment="Center"
                         Click="CreateDeckClick"/>
             </StackPanel>
+        </Grid>
+
+        <Grid x:Name="DeckDetailSection" Grid.Row="1" Grid.Column="1"
+              Margin="45,40,45,50" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="0,0,0,30">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{Binding SelectedItem.Name, ElementName=lstbDecks}"
+                           FontSize="24" FontWeight="Bold" Foreground="#111827"
+                           VerticalAlignment="Center" TextWrapping="NoWrap"
+                           TextTrimming="CharacterEllipsis"
+                           ToolTip="{Binding SelectedItem.Name, ElementName=lstbDecks}"/>
+
+                <Border Grid.Column="1" Background="#E7EEFD" CornerRadius="10" Padding="10,3"
+                        Margin="15,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding SelectedItem.Cards.Count, ElementName=lstbDecks, StringFormat='Total cards: {0}'}"
+                               Foreground="#135BEC" FontWeight="SemiBold" FontSize="11"/>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="0,0,0,25">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Background="#F9F9FA" CornerRadius="20" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Last studied" Foreground="#6B7280"
+                                   FontSize="11" FontWeight="SemiBold"/>
+                        <TextBlock Text="{Binding SelectedItem.LastStudiedDisplay, ElementName=lstbDecks}"
+                                   Foreground="#111827" FontWeight="Bold" FontSize="19"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Background="#F9F9FA" CornerRadius="20" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Best score" Foreground="#6B7280"
+                                   FontSize="11" FontWeight="SemiBold"/>
+                        <TextBlock Text="{Binding SelectedItem.BestScoreDisplay, ElementName=lstbDecks}"
+                                   Foreground="#111827" FontWeight="Bold" FontSize="19"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="4" Background="#F9F9FA" CornerRadius="20" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Average accuracy" Foreground="#6B7280"
+                                   FontSize="11" FontWeight="SemiBold"/>
+                        <TextBlock Text="{Binding SelectedItem.AverageAccuracyDisplay, ElementName=lstbDecks}"
+                                   Foreground="#111827" FontWeight="Bold" FontSize="19"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="15"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Style="{StaticResource RoundedButtonBlue18}"
+                        Content="Start Study" Height="35" BorderThickness="0"
+                        Background="#135BEC" Foreground="White"
+                        FontSize="13.5" FontWeight="SemiBold"
+                        VerticalContentAlignment="Center"
+                        Click="StartStudyClick"/>
+
+                <Button Grid.Column="2" Style="{StaticResource RoundedButtonGray18}"
+                        Content="Edit Deck" Height="35" BorderThickness="0"
+                        Background="#E5E7EB" Foreground="#1F2937"
+                        FontSize="13.5" FontWeight="SemiBold"
+                        VerticalContentAlignment="Center"
+                        Click="EditDeckClick"/>
+            </Grid>
         </Grid>
 
         <Button Style="{StaticResource TextOnlyButton}" Grid.Row="1"
