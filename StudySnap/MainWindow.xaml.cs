@@ -109,5 +109,29 @@ namespace StudySnap
             if (e.ChangedButton == MouseButton.Left)
                 this.DragMove();
         }
+
+        private void SearchBoxTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_decks == null || _decks.Count == 0)
+                return;
+
+            string searchPrompt = txtbSearchBox.Text.ToLower().Trim();
+            List<Deck> filteredDecks = _decks.Where(d => d.Name.ToLower().Contains(searchPrompt)).ToList();
+
+            lstbDecks.ItemsSource = filteredDecks;
+
+            if (filteredDecks.Count == 0)
+            {
+                lblNoDecks.Visibility = Visibility.Visible;
+                DeckDetailSection.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                lblNoDecks.Visibility = Visibility.Collapsed;
+                DeckDetailSection.Visibility = Visibility.Visible;
+
+                lstbDecks.SelectedIndex = 0;
+            }
+        }
     }
 }

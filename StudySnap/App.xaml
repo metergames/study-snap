@@ -28,7 +28,7 @@
         <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
         <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
         <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
-        
+
         <Style x:Key="RoundedButton15" TargetType="{x:Type Button}">
             <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -69,7 +69,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style x:Key="RoundedButtonBlue18" TargetType="{x:Type Button}">
             <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -110,7 +110,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style x:Key="RoundedButtonGray18" TargetType="{x:Type Button}">
             <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -249,5 +249,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Application.Resources>
 </Application>

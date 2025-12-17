@@ -47,10 +47,18 @@
             <Border Background="#F6F6F8" BorderBrush="#DDDDDE"
                     BorderThickness="1" CornerRadius="15" Height="30"
                     Margin="1,12,1,1" Grid.Row="1">
-                <TextBox x:Name="txtbSearchBox" Background="Transparent"
-                         BorderThickness="0" VerticalContentAlignment="Center"
-                         Text="Search decks..." FontSize="11"
-                         Margin="15,1,1,1"/>
+                <Grid>
+                    <TextBlock x:Name="lblSearchPlaceholder"
+                               Text="Search decks..." Foreground="#6B7280"
+                               FontSize="11" VerticalAlignment="Center"
+                               Margin="25,0,0,0" IsHitTestVisible="False"
+                               Visibility="{Binding Text.IsEmpty, ElementName=txtbSearchBox, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                    <TextBox x:Name="txtbSearchBox" Background="Transparent"
+                             BorderThickness="0" VerticalContentAlignment="Center"
+                             FontSize="11" Margin="22,1,1,1"
+                             TextChanged="SearchBoxTextChanged"/>
+                </Grid>
             </Border>
 
             <Button Grid.Row="2" Style="{StaticResource RoundedButton15}"
