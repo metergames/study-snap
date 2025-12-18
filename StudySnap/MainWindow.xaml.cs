@@ -23,8 +23,8 @@ namespace StudySnap
     {
         private DataRepository _repository;
         private List<Deck> _decks;
-        private const string DECK_FILE_PATH = "C:\\Users\\User\\Desktop\\decks.json";
-        private const string RESULTS_FILE_PATH = "C:\\Users\\User\\Desktop\\session_results.json";
+        private const string DECK_FILE_PATH = "C:\\Users\\felip\\Downloads\\decks.json";
+        private const string RESULTS_FILE_PATH = "C:\\Users\\felip\\Downloads\\session_results.json";
 
         public MainWindow()
         {
@@ -88,7 +88,9 @@ namespace StudySnap
 
         private void StartStudyClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Clicked start study");
+            //MessageBox.Show("Clicked start study");
+            //StudyMode studyWindow = new StudyMode();
+            //studyWindow.Show();
         }
 
         private void EditDeckClick(object sender, RoutedEventArgs e)
