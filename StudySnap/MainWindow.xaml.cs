@@ -23,8 +23,8 @@ namespace StudySnap
     {
         private DataRepository _repository;
         private List<Deck> _decks;
-        private const string DECK_FILE_PATH = "C:\\Users\\felip\\Downloads\\decks.json";
-        public const string RESULTS_FILE_PATH = "C:\\Users\\felip\\Downloads\\session_results.json";
+        private const string DECK_FILE_PATH = "C:\\Users\\User\\Desktop\\decks.json";
+        public const string RESULTS_FILE_PATH = "C:\\Users\\User\\Desktop\\session_results.json";
 
         public MainWindow()
         {
@@ -40,7 +40,7 @@ namespace StudySnap
         /// Reloads the list of decks from the JSON file and updates the UI.
         /// If there are no decks, show the welcome section and a label stating there are no decks.
         /// </summary>
-        private void RefreshDecks()
+        private void RefreshDecks(int indexToSelect = 0)
         {
             _decks = _repository.LoadDecks(DECK_FILE_PATH);
             List<StudySessionResult> results = _repository.LoadSessionResults(RESULTS_FILE_PATH);
@@ -77,7 +77,9 @@ namespace StudySnap
                 WelcomeSection.Visibility = Visibility.Collapsed;
                 DeckDetailSection.Visibility = Visibility.Visible;
                 lstbDecks.ItemsSource = _decks;
-                lstbDecks.SelectedIndex = 0;
+                if (indexToSelect < lstbDecks.Items.Count)
+                    lstbDecks.SelectedIndex = indexToSelect;
+                else lstbDecks.SelectedIndex = 0;
             }
         }
 
@@ -88,18 +90,24 @@ namespace StudySnap
 
         private void StartStudyClick(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show("Clicked start study");
             if (lstbDecks.SelectedItem != null)
             {
                 Deck selectedDeck = lstbDecks.SelectedItem as Deck;
                 StudyMode studyWindow = new StudyMode(selectedDeck);
-                studyWindow.Show();
+                studyWindow.ShowDialog();
+                RefreshDecks(lstbDecks.SelectedIndex);
             }
         }
 
         private void EditDeckClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Clicked edit deck");
+            if (lstbDecks.SelectedItem != null)
+            {
+                Deck selectedDeck = lstbDecks.SelectedItem as Deck;
+                DeckEditor editorWindow = new DeckEditor(selectedDeck);
+                editorWindow.ShowDialog();
+                RefreshDecks(lstbDecks.SelectedIndex);
+            }
         }
 
         private void ExitButtonClick(object sender, RoutedEventArgs e)
@@ -138,6 +146,14 @@ namespace StudySnap
 
                 lstbDecks.SelectedIndex = 0;
             }
+        }
+
+        private void DeckSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Deck currentDeck = lstbDecks.SelectedItem as Deck;
+            if (currentDeck != null && currentDeck.Cards.Count > 0)
+                btnStartStudy.IsEnabled = true;
+            else btnStartStudy.IsEnabled = false;
         }
     }
 }

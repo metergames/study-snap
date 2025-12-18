@@ -208,6 +208,37 @@
             </Setter>
         </Style>
 
+        <Style x:Key="CardItemContainerStyle" TargetType="ListBoxItem">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="25"
+                                BorderBrush="#E0E0E0" BorderThickness="0" Padding="2,10,10,10">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#1E88E5"/>
+                                <Setter TargetName="Border" Property="BorderThickness" Value="0"/>
+                                <Setter TargetName="Border" Property="Background" Value="#E7EEFD"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                    <Condition Property="IsSelected" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Border" Property="Background" Value="#E6E6E6"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="ModernScrollBarStyle" TargetType="{x:Type ScrollBar}">
             <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
             <Setter Property="Foreground" Value="#D1D5DB"/>

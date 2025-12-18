@@ -74,6 +74,9 @@ namespace StudySnap.Models
                 Cards.Remove(card);
         }
 
+        /// <summary>
+        /// Calculated functions, used for UI purposes, no need for validation
+        /// </summary>
         public string LastStudiedDisplay { get; set; } = "-";
 
         public string BestScoreDisplay { get; set; } = "-";

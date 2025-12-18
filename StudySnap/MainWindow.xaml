@@ -71,7 +71,8 @@
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                      ItemContainerStyle="{StaticResource DeckItemContainerStyle}"
-                     Background="Transparent" BorderThickness="0">
+                     Background="Transparent" BorderThickness="0"
+                     SelectionChanged="DeckSelectionChanged">
 
                 <ListBox.Resources>
                     <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ModernScrollBarStyle}"/>
@@ -305,7 +306,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Style="{StaticResource RoundedButtonBlue18}"
+                <Button x:Name="btnStartStudy"
+                        Grid.Column="0" Style="{StaticResource RoundedButtonBlue18}"
                         Content="Start Study" Height="35" BorderThickness="0"
                         Background="#135BEC" Foreground="White"
                         FontSize="13.5" FontWeight="SemiBold"
