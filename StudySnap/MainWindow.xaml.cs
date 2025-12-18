@@ -24,7 +24,7 @@ namespace StudySnap
         private DataRepository _repository;
         private List<Deck> _decks;
         private const string DECK_FILE_PATH = "C:\\Users\\felip\\Downloads\\decks.json";
-        private const string RESULTS_FILE_PATH = "C:\\Users\\felip\\Downloads\\session_results.json";
+        public const string RESULTS_FILE_PATH = "C:\\Users\\felip\\Downloads\\session_results.json";
 
         public MainWindow()
         {
@@ -89,8 +89,12 @@ namespace StudySnap
         private void StartStudyClick(object sender, RoutedEventArgs e)
         {
             //MessageBox.Show("Clicked start study");
-            //StudyMode studyWindow = new StudyMode();
-            //studyWindow.Show();
+            if (lstbDecks.SelectedItem != null)
+            {
+                Deck selectedDeck = lstbDecks.SelectedItem as Deck;
+                StudyMode studyWindow = new StudyMode(selectedDeck);
+                studyWindow.Show();
+            }
         }
 
         private void EditDeckClick(object sender, RoutedEventArgs e)

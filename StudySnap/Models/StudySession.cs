@@ -105,6 +105,12 @@ namespace StudySnap.Models
             return (double)CorrectCount / TotalCards * 100;
         }
 
+        public double CalculateCurrentScore()
+        {
+            if (CurrentCardIndex == 0) return 0;
+            return (double)CorrectCount / CurrentCardIndex * 100;
+        }
+
         /// <summary>
         /// Randomizes the order of the cards in the current deck.
         /// </summary>

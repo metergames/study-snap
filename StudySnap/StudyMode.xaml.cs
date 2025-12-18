@@ -61,7 +61,7 @@ namespace StudySnap
 
             CorrectRun.Text = _session.CorrectCount.ToString();
             IncorrectRun.Text = (_session.CurrentCardIndex - _session.CorrectCount).ToString();
-            ScoreRun.Text = $"{_session.CalculateScore():F0}%";
+            ScoreRun.Text = $"{_session.CalculateCurrentScore():F0}%";
 
             // Step 4: Reset the Card State (Hide answer)
             _isAnswerRevealed = false;
@@ -71,12 +71,28 @@ namespace StudySnap
         private void FinishSession()
         {
             StudySessionResult result = _session.CreateSessionResult();
+            DataRepository repository = new DataRepository();
+            string path = MainWindow.RESULTS_FILE_PATH;
+
+            try
+            {
+                List<StudySessionResult> history = repository.LoadSessionResults(path);
+
+                history.Add(result);
+
+                repository.SaveSessionResults(history, path);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to save progress: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             string message = $"Session Complete!\n\n" +
                              $"Score: {result.Score:F0}%\n" +
                              $"Correct: {result.CorrectCount}\n" +
                              $"Total: {result.TotalCards}";
             MessageBox.Show(message, "Summary", MessageBoxButton.OK, MessageBoxImage.Information);
-            // TODO: use DataRepository to save the 'result' to your history file.
+            
             this.Close();
         }
         private void ProcessAnswer(bool isCorrect)
