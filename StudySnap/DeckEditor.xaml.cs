@@ -63,6 +63,8 @@ namespace StudySnap
                 txtFront.Text = card.Front;
                 txtBack.Text = card.Back;
                 lblPreview.Text = card.Front;
+
+                btnSaveCard.Content = "Save Card"; // Save button action - Overwrite
             }
         }
 
@@ -78,6 +80,8 @@ namespace StudySnap
             txtFront.Text = "";
             txtBack.Text = "";
             lblPreview.Text = "";
+
+            btnSaveCard.Content = "Add Card"; // Save button action - Add
         }
 
         private void FrontTextChanged(object sender, TextChangedEventArgs e)
@@ -129,11 +133,8 @@ namespace StudySnap
             }
             else
             {
-                if (_unsavedChanges)
-                {
-                    if (MessageBox.Show("You have unsaved changes. Are you sure you want to discard them?", "Unsaved Changes", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
-                        return;
-                }
+                if (!ConfirmDiscardChanges())
+                    return;
 
                 this.DialogResult = false;
                 this.Close();
@@ -143,6 +144,39 @@ namespace StudySnap
         private void SaveDeckClick(object sender, RoutedEventArgs e)
         {
             AttemptClose(true);
+        }
+
+        private void DeckEditorWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (DialogResult != null) // If already handled closing
+                return;
+
+            if (!ConfirmDiscardChanges())
+                e.Cancel = true;
+        }
+
+        private bool ConfirmDiscardChanges()
+        {
+            if (!_unsavedChanges)
+                return true;
+
+            return MessageBox.Show("You have unsaved changes. Are you sure you want to discard them?", "Unsaved Changes", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
+        }
+
+        private void DeleteCard(object sender, RoutedEventArgs e)
+        {
+            if (_selectedCard == null)
+                return;
+
+            if (MessageBox.Show("Are you sure you want to delete this card?", "Delete Card", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                _currentDeck.RemoveCard(_selectedCard);
+
+                _unsavedChanges = true;
+
+                LoadCards();
+                ClearForm();
+            }
         }
     }
 }

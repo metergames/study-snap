@@ -8,4 +8,15 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Images\cards-three-blue.png" />
+    <None Remove="Images\cards-three-gray.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\cards-three-blue.png" />
+    <Resource Include="Images\cards-three-gray.png" />
+    <Resource Include="Images\trash-fill-red.png" />
+  </ItemGroup>
+
 </Project>

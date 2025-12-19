@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudySnap"
         mc:Ignorable="d"
-        Title="Deck Editor" Height="835" Width="1000"
+        Title="Deck Editor" Height="793" Width="1000"
         MinHeight="523" MinWidth="800"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterOwner"
+        Closing="DeckEditorWindowClosing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="325"/>
@@ -66,11 +67,12 @@
                    RadiusX="25" RadiusY="25" HorizontalAlignment="Stretch"
                    VerticalAlignment="Stretch" Margin="20,50,15,20"/>
 
-        <Grid Grid.Column="0" Grid.Row="1" Margin="20,0,15,35">
+        <Grid Grid.Column="0" Grid.Row="1" Margin="20,0,15,28">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Button Grid.Row="0" Style="{StaticResource RoundedButton15}"
@@ -109,7 +111,8 @@
                                     CornerRadius="30" Background="#F3F4F6"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center">
-                                <!-- Icon -->
+                                <Image x:Name="imgIcon" Source="/Images/cards-three-gray.png"
+                                       Width="18" Height="18" Stretch="Uniform"/>
                             </Border>
 
                             <StackPanel VerticalAlignment="Center" Grid.Column="1"
@@ -124,6 +127,8 @@
                         <DataTemplate.Triggers>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
                                 <Setter TargetName="icnBorder" Property="Background" Value="#BCD0F9"/>
+
+                                <Setter TargetName="imgIcon" Property="Source" Value="/Images/cards-three-blue.png"/>
                             </DataTrigger>
                         </DataTemplate.Triggers>
                     </DataTemplate>
@@ -134,12 +139,58 @@
                        HorizontalAlignment="Center" Margin="0,50,0,0"
                        Foreground="#9CA3AF" FontStyle="Italic"
                        Grid.Row="2"/>
+
+            <Button x:Name="btnDeleteCard" Click="DeleteCard"
+                    Grid.Row="3" Height="32" Margin="7,5,7,0"
+                    BorderThickness="0" Cursor="Hand">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="15"/>
+                    </Style>
+                </Button.Resources>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                    <Image Source="/Images/trash-fill-red.png"
+                           Width="20" Height="20" Margin="0,0,8,0"/>
+
+                    <TextBlock Text="Delete Card" Foreground="#DC2626"
+                               FontSize="12.5" FontWeight="Bold"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#FEE2E2"/>
+
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                            CornerRadius="15">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FDCACA"/>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FCB1B1"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Grid>
 
         <!-- Deck Overview -->
         <Rectangle Grid.Row="1" Grid.Column="1" Fill="White" RadiusX="25"
                    RadiusY="25" HorizontalAlignment="Stretch"
-                   VerticalAlignment="Stretch" Margin="20,10,15,20"/>
+                   VerticalAlignment="Stretch" Margin="20,10,20,20"/>
 
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
@@ -151,7 +202,7 @@
             <TextBlock Text="Edit Flashcard" FontSize="25" FontWeight="Bold"
                        Foreground="#111827" Margin="40,40,40,0" Grid.Row="0"/>
 
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="0,0,10,0" Margin="40,20,40,40">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="40,20,40,0">
                 <ScrollViewer.Resources>
                     <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ModernScrollBarStyle}"/>
                 </ScrollViewer.Resources>
@@ -188,28 +239,18 @@
             </ScrollViewer>
 
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,40,40">
+                <Button Style="{StaticResource RoundedButtonGray18}"
+                        Content="Clear" Height="37" Width="100" BorderThickness="0"
+                        Background="#E5E7EB" Foreground="#1F2937"
+                        FontSize="14" FontWeight="Bold" Margin="0,0,15,0" Padding="15,0"
+                        VerticalContentAlignment="Center" Click="ClearButtonClick"/>
 
-                <Button Content="Clear" Width="100" Height="40" Margin="0,0,15,0"
-                        Background="#E5E7EB" Foreground="#374151"
-                        FontSize="14" FontWeight="Bold" BorderThickness="0" Cursor="Hand"
-                        Click="ClearButtonClick">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="20"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-
-                <Button Content="Save Card" Width="120" Height="40"
+                <Button x:Name="btnSaveCard"
+                        Style="{StaticResource RoundedButtonBlue18}"
+                        Content="Add Card" Height="37" Width="120"
                         Background="#135BEC" Foreground="White"
                         FontSize="14" FontWeight="Bold" BorderThickness="0"
-                        Cursor="Hand" Click="SaveCard">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="20"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
+                        VerticalContentAlignment="Center" Click="SaveCard"/>
             </StackPanel>
         </Grid>
     </Grid>

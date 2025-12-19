@@ -94,7 +94,12 @@ namespace StudySnap
             {
                 Deck selectedDeck = lstbDecks.SelectedItem as Deck;
                 StudyMode studyWindow = new StudyMode(selectedDeck);
+                studyWindow.Owner = this;
+
+                this.Hide(); // Hide dashboard
                 studyWindow.ShowDialog();
+                this.Show(); // Show dashboard
+
                 RefreshDecks(lstbDecks.SelectedIndex);
             }
         }
@@ -105,8 +110,12 @@ namespace StudySnap
             {
                 Deck selectedDeck = lstbDecks.SelectedItem as Deck;
                 DeckEditor editorWindow = new DeckEditor(selectedDeck);
+                editorWindow.Owner = this;
 
+                this.Hide(); // Hide dashboard
                 bool? saveData = editorWindow.ShowDialog();
+                this.Show(); // Show dashboard
+
                 if (saveData == true)
                     _repository.SaveDecks(_decks, DECK_FILE_PATH);
 
