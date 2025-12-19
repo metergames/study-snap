@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudySnap"
         mc:Ignorable="d"
-        Title="Deck Editor" Height="800" Width="1000"
+        Title="Deck Editor" Height="835" Width="1000"
+        MinHeight="523" MinWidth="800"
         WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -21,9 +22,44 @@
         <Rectangle Grid.Row="1" Grid.ColumnSpan="2" Fill="#F6F6F8"/>
 
         <!-- Title bar -->
-        <Label Content="StudySnap" Grid.Row="0" Grid.ColumnSpan="2"
-               VerticalAlignment="Center" FontSize="20"
-               FontFamily="Segoe UI Black" Margin="35,0,0,0"/>
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal"
+                        VerticalAlignment="Center" Margin="35,0,25,0">
+                <TextBlock Text="StudySnap" FontSize="20" FontFamily="Segoe UI Black"
+                           Foreground="#111827"/>
+            </StackPanel>
+
+            <TextBlock Grid.Column="1" Text="{Binding Name}"
+                       FontSize="18" FontWeight="ExtraBold" Foreground="#1F2937"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       TextTrimming="CharacterEllipsis" Margin="0,0,20,0"
+                       ToolTip="{Binding Name}"/>
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal"
+                        VerticalAlignment="Center" Margin="0,0,35,0">
+                <Button Style="{StaticResource TextOnlyButton}"
+                        Content="← Back to Dashboard"
+                        Margin="0,0,35,0" Click="BackToDashboardClick"/>
+
+                <Button Style="{StaticResource RoundedButton15}"
+                        Content="Save Deck" Height="29" BorderThickness="0"
+                        Background="#135BEC" Foreground="White"
+                        FontSize="12" FontWeight="Bold" Margin="0,10" Padding="15,0"
+                        VerticalContentAlignment="Center" Click="SaveDeckClick"/>
+
+                <Button Style="{StaticResource RoundedButtonGray18}"
+                        Content="Cancel" Height="29" BorderThickness="0"
+                        Background="#E5E7EB" Foreground="#1F2937"
+                        FontSize="12" FontWeight="Bold" Margin="10,10,0,10" Padding="15,0"
+                        VerticalContentAlignment="Center" Click="CancelClick"/>
+            </StackPanel>
+        </Grid>
 
         <!-- Deck Panel -->
         <Rectangle Grid.Row="1" Grid.Column="0" Fill="White"
@@ -42,48 +78,49 @@
                     Background="#135BEC" Foreground="White"
                     FontSize="11" FontWeight="Bold" Margin="0,10"
                     VerticalContentAlignment="Center" Click="AddNewCardClick"/>
-        
+
             <ListBox Grid.Row="2" x:Name="lstbCards" SelectionMode="Single"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                      ItemContainerStyle="{StaticResource CardItemContainerStyle}"
                      Background="Transparent" BorderThickness="0"
-                     SelectionChanged="CardSelectionChanged">
-        
+                     SelectionChanged="CardSelectionChanged"
+                     Padding="5,0" Margin="0,2,0,0">
+
                 <ListBox.Resources>
                     <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ModernScrollBarStyle}"/>
                 </ListBox.Resources>
-        
+
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
-        
+
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Width="258" Height="38">
+                        <Grid Width="278" Height="30">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="45"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-        
-                            <Border x:Name="icnBorder" Width="37.5" Height="37.5" Grid.Column="0"
-                                    CornerRadius="40" Background="#F3F4F6"
+
+                            <Border x:Name="icnBorder" Width="30" Height="30" Grid.Column="0"
+                                    CornerRadius="30" Background="#F3F4F6"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center">
                                 <!-- Icon -->
                             </Border>
-        
+
                             <StackPanel VerticalAlignment="Center" Grid.Column="1"
                                         HorizontalAlignment="Left" Margin="0,0,25,0">
                                 <TextBlock Text="{Binding Front}" FontSize="13"
-                                           FontWeight="Bold" Foreground="#1F2937"
+                                           FontWeight="SemiBold" Foreground="#1F2937"
                                            TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
                                            ToolTip="{Binding Front}" TextAlignment="Left"/>
                             </StackPanel>
                         </Grid>
-        
+
                         <DataTemplate.Triggers>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
                                 <Setter TargetName="icnBorder" Property="Background" Value="#BCD0F9"/>
@@ -92,7 +129,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        
+
             <TextBlock x:Name="lblNoCards" Text="No cards"
                        HorizontalAlignment="Center" Margin="0,50,0,0"
                        Foreground="#9CA3AF" FontStyle="Italic"
@@ -118,7 +155,7 @@
                 <ScrollViewer.Resources>
                     <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ModernScrollBarStyle}"/>
                 </ScrollViewer.Resources>
-                
+
                 <StackPanel>
                     <TextBlock Text="Front (Question)" Foreground="#6B7280" FontWeight="SemiBold" Margin="0,0,0,8"/>
 
@@ -127,7 +164,8 @@
                          Background="Transparent" BorderThickness="0"
                          TextWrapping="Wrap" AcceptsReturn="True"
                          FontSize="14" Foreground="#1F2937"
-                         VerticalScrollBarVisibility="Auto"/>
+                         VerticalScrollBarVisibility="Auto"
+                                 TextChanged="FrontTextChanged"/>
                     </Border>
 
                     <TextBlock Text="Back (Answer)" Foreground="#6B7280" FontWeight="SemiBold" Margin="0,20,0,8"/>
@@ -152,8 +190,9 @@
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,40,40">
 
                 <Button Content="Clear" Width="100" Height="40" Margin="0,0,15,0"
-                        Background="#E5E7EB" Foreground="#374151" 
-                        FontSize="14" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
+                        Background="#E5E7EB" Foreground="#374151"
+                        FontSize="14" FontWeight="Bold" BorderThickness="0" Cursor="Hand"
+                        Click="ClearButtonClick">
                     <Button.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="20"/>
@@ -162,8 +201,9 @@
                 </Button>
 
                 <Button Content="Save Card" Width="120" Height="40"
-                        Background="#135BEC" Foreground="White" 
-                        FontSize="14" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
+                        Background="#135BEC" Foreground="White"
+                        FontSize="14" FontWeight="Bold" BorderThickness="0"
+                        Cursor="Hand" Click="SaveCard">
                     <Button.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="20"/>

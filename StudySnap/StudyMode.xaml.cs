@@ -22,6 +22,7 @@ namespace StudySnap
     {
         private StudySession _session;
         private bool _isAnswerRevealed = false;
+
         // Constructor that takes a Deck object to initialize the study session
         public StudyMode(Deck deck)
         {
@@ -41,6 +42,7 @@ namespace StudySnap
             txtbDeckTitle.Text = $"Deck: {deck.Name}";
             UpdateUI();
         }
+
         // Updates the UI elements based on the current state of the study session
         private void UpdateUI()
         {
@@ -68,6 +70,7 @@ namespace StudySnap
             txtbBackText.Visibility = Visibility.Hidden;
             ClickToRevealText.Visibility = Visibility.Visible;
         }
+
         private void FinishSession()
         {
             StudySessionResult result = _session.CreateSessionResult();
@@ -92,17 +95,15 @@ namespace StudySnap
                              $"Correct: {result.CorrectCount}\n" +
                              $"Total: {result.TotalCards}";
             MessageBox.Show(message, "Summary", MessageBoxButton.OK, MessageBoxImage.Information);
-            
+
             this.Close();
         }
+
         private void ProcessAnswer(bool isCorrect)
         {
-            /// TO DISCUSS:
-            // Optional:  Do we force the user to reveal answer if incorrect? 
-
             if (!_isAnswerRevealed)
             {
-                // If you want to force reveal first, uncomment this:
+                // Force reveal if answer not shown but pressed button
                 // Card_MouseDown(null, null);
                 // return;
             }
@@ -120,15 +121,15 @@ namespace StudySnap
         {
             ProcessAnswer(false);
         }
+
         // Logic: reveal the answer when the user clicks on the card
         private void Card_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
             if (!_isAnswerRevealed)
             {
                 _isAnswerRevealed = true;
                 txtbBackText.Visibility = Visibility.Visible;
-                ClickToRevealText.Visibility = Visibility.Hidden; 
+                ClickToRevealText.Visibility = Visibility.Hidden;
             }
         }
 

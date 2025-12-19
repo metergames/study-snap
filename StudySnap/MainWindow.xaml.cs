@@ -105,7 +105,11 @@ namespace StudySnap
             {
                 Deck selectedDeck = lstbDecks.SelectedItem as Deck;
                 DeckEditor editorWindow = new DeckEditor(selectedDeck);
-                editorWindow.ShowDialog();
+
+                bool? saveData = editorWindow.ShowDialog();
+                if (saveData == true)
+                    _repository.SaveDecks(_decks, DECK_FILE_PATH);
+
                 RefreshDecks(lstbDecks.SelectedIndex);
             }
         }

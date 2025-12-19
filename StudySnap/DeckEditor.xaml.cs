@@ -22,11 +22,15 @@ namespace StudySnap
     {
         private Deck _currentDeck;
         private Flashcard _selectedCard;
+        private bool _unsavedChanges = false;
 
         public DeckEditor(Deck deck)
         {
             InitializeComponent();
             _currentDeck = deck;
+
+            this.DataContext = deck; // Make deck data viewable directly from XAML
+
             LoadCards();
         }
 
@@ -45,18 +49,100 @@ namespace StudySnap
 
         private void AddNewCardClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show($"Adding card to {_currentDeck.Name}");
+            ClearForm();
+            txtFront.Focus();
         }
 
         private void CardSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (lstbCards.SelectedItem is Flashcard card)
+            if (lstbCards.SelectedIndex >= 0)
             {
+                Flashcard card = lstbCards.SelectedItem as Flashcard;
+
                 _selectedCard = card;
                 txtFront.Text = card.Front;
                 txtBack.Text = card.Back;
                 lblPreview.Text = card.Front;
             }
+        }
+
+        private void ClearButtonClick(object sender, RoutedEventArgs e)
+        {
+            ClearForm();
+        }
+
+        private void ClearForm()
+        {
+            _selectedCard = null;
+            lstbCards.SelectedIndex = -1;
+            txtFront.Text = "";
+            txtBack.Text = "";
+            lblPreview.Text = "";
+        }
+
+        private void FrontTextChanged(object sender, TextChangedEventArgs e)
+        {
+            lblPreview.Text = txtFront.Text;
+        }
+
+        private void SaveCard(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtFront.Text.Trim()) || string.IsNullOrWhiteSpace(txtBack.Text.Trim()))
+            {
+                MessageBox.Show("Both front and back are required", "Validation Error");
+                return;
+            }
+
+            if (_selectedCard == null) // Add card
+            {
+                Flashcard newCard = new Flashcard(txtFront.Text, txtBack.Text);
+                _currentDeck.AddCard(newCard);
+            }
+            else // Edit existing card
+            {
+                _selectedCard.Front = txtFront.Text;
+                _selectedCard.Back = txtBack.Text;
+            }
+
+            _unsavedChanges = true;
+
+            LoadCards();
+            ClearForm();
+        }
+
+        private void BackToDashboardClick(object sender, RoutedEventArgs e)
+        {
+            AttemptClose(false);
+        }
+
+        private void CancelClick(object sender, RoutedEventArgs e)
+        {
+            AttemptClose(false);
+        }
+
+        private void AttemptClose(bool isSaving)
+        {
+            if (isSaving)
+            {
+                this.DialogResult = true; // Communication with MainWindow
+                this.Close();
+            }
+            else
+            {
+                if (_unsavedChanges)
+                {
+                    if (MessageBox.Show("You have unsaved changes. Are you sure you want to discard them?", "Unsaved Changes", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                        return;
+                }
+
+                this.DialogResult = false;
+                this.Close();
+            }
+        }
+
+        private void SaveDeckClick(object sender, RoutedEventArgs e)
+        {
+            AttemptClose(true);
         }
     }
 }
