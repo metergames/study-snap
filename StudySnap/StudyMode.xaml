@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:StudySnap"
         mc:Ignorable="d"
         Title="Study Mode" Height="700" Width="900" Background="#F6F6F8"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterOwner" Closing="StudyModeWindowClosing">
     <Grid>
         <!-- Define Rows -->
         <Grid.RowDefinitions>

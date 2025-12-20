@@ -24,6 +24,8 @@ namespace StudySnap
         private Flashcard _selectedCard;
         private bool _unsavedChanges = false;
 
+        public bool WillDelete { get; private set; } = false;
+
         public DeckEditor(Deck deck)
         {
             InitializeComponent();
@@ -183,6 +185,24 @@ namespace StudySnap
                 LoadCards();
                 ClearForm();
             }
+        }
+
+        private void DeleteDeckClick(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show($"Are you sure you want to delete the {_currentDeck.Name} deck?\n\nThis will also permanently delete all study records and statistics for this deck.", "Delete Deck", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                WillDelete = true;
+                this.Close();
+            }
+        }
+
+        /// <summary>
+        /// Allow window to be dragged around by holding anywhere.
+        /// </summary>
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
         }
     }
 }

@@ -8,7 +8,7 @@
         Title="Deck Editor" Height="793" Width="1000"
         MinHeight="523" MinWidth="800"
         WindowStartupLocation="CenterOwner"
-        Closing="DeckEditorWindowClosing">
+        Closing="DeckEditorWindowClosing" MouseDown="Window_MouseDown">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="325"/>
@@ -45,9 +45,13 @@
 
             <StackPanel Grid.Column="2" Orientation="Horizontal"
                         VerticalAlignment="Center" Margin="0,0,35,0">
+                <Button Content="Delete Deck" Style="{StaticResource TextOnlyButton}"
+                        Foreground="#EF4444" FontWeight="Bold"
+                        Margin="0,0,20,0" Click="DeleteDeckClick"/>
+
                 <Button Style="{StaticResource TextOnlyButton}"
                         Content="← Back to Dashboard"
-                        Margin="0,0,35,0" Click="BackToDashboardClick"/>
+                        Margin="0,0,20,0" Click="BackToDashboardClick"/>
 
                 <Button Style="{StaticResource RoundedButton15}"
                         Content="Save Deck" Height="29" BorderThickness="0"

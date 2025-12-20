@@ -23,8 +23,8 @@ namespace StudySnap
     {
         private DataRepository _repository;
         private List<Deck> _decks;
-        private const string DECK_FILE_PATH =   "C:\\Users\\felip\\Downloads\\decks.json";
-        public const string RESULTS_FILE_PATH = "C:\\Users\\felip\\Downloads\\session_results.json";
+        private const string DECK_FILE_PATH = "C:\\Users\\User\\Desktop\\decks.json";
+        public const string RESULTS_FILE_PATH = "C:\\Users\\User\\Desktop\\session_results.json";
 
         public MainWindow()
         {
@@ -77,6 +77,7 @@ namespace StudySnap
                 WelcomeSection.Visibility = Visibility.Collapsed;
                 DeckDetailSection.Visibility = Visibility.Visible;
                 lstbDecks.ItemsSource = _decks;
+                FilterBySearch();
                 if (indexToSelect < lstbDecks.Items.Count)
                     lstbDecks.SelectedIndex = indexToSelect;
                 else lstbDecks.SelectedIndex = 0;
@@ -117,12 +118,37 @@ namespace StudySnap
             bool? saveData = deckEditor.ShowDialog();
             this.Show(); // Show dashboard
 
+            if (deckEditor.WillDelete)
+            {
+                _decks.Remove(deck);
+                DeleteDeckHistory(oldName);
+                _repository.SaveDecks(_decks, DECK_FILE_PATH);
+                RefreshDecks();
+                return;
+            }
+
             if (saveData == true)
             {
                 if (deck.Name != oldName)
                     UpdateResultsNewDeckName(oldName, deck.Name);
 
                 _repository.SaveDecks(_decks, DECK_FILE_PATH);
+            }
+        }
+
+        private void DeleteDeckHistory(string name)
+        {
+            try
+            {
+                List<StudySessionResult> studyResults = _repository.LoadSessionResults(RESULTS_FILE_PATH);
+                int removedCount = studyResults.RemoveAll(r => r.DeckName == name);
+
+                if (removedCount > 0)
+                    _repository.SaveSessionResults(studyResults, RESULTS_FILE_PATH);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error deleting removed deck's history: {ex.Message}");
             }
         }
 
@@ -193,6 +219,11 @@ namespace StudySnap
         }
 
         private void SearchBoxTextChanged(object sender, TextChangedEventArgs e)
+        {
+            FilterBySearch();
+        }
+
+        private void FilterBySearch()
         {
             if (_decks == null || _decks.Count == 0)
                 return;

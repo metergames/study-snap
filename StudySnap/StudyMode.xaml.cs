@@ -133,8 +133,18 @@ namespace StudySnap
         {
             if (MessageBox.Show("Are you sure you want to end the session?", "End Session", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
+                DialogResult = true;
                 this.Close();
             }
+        }
+
+        private void StudyModeWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (DialogResult != null) // If already handled closing
+                return;
+
+            if (MessageBox.Show("Are you sure you want to end the session?", "End Session", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+                e.Cancel = true;
         }
     }
 }
