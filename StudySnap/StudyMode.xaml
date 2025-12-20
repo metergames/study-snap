@@ -67,35 +67,21 @@
 
         <!-- Action Buttons Panel -->
         <StackPanel Grid.Row="2" Orientation="Horizontal"
-                    HorizontalAlignment="Center" Margin="0,20,0,40">
-            <!-- Correct button -->
-            <Button Content="I got it right" Width="200" Height="60" Margin="10"
-            FontSize="16" FontWeight="Bold" Foreground="#2E7D32" BorderThickness="0"
-                    Click="RightButton_Click">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="15"/>
-                    </Style>
-                </Button.Resources>
-                <Button.Background>
-                    <SolidColorBrush Color="#E8F5E9"/>
-                </Button.Background>
-            </Button>
-
-            <!-- Incorrect button -->
-            <Button Content="I got it wrong" Width="200" Height="60" Margin="10"
-                    FontSize="16" FontWeight="Bold" Foreground="#C62828" BorderThickness="0"
-                    Click="WrongButton_Click">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="15"/>
-                    </Style>
-                </Button.Resources>
-                <Button.Background>
-                    <SolidColorBrush Color="#FFEBEE"/>
-                </Button.Background>
-            </Button>
-
+            HorizontalAlignment="Center" Margin="0,20,0,40">
+            <!-- Right Button -->
+            <Button x:Name="BtnRight"
+            Style="{StaticResource StudyButtonStyle}"
+            Content="I got it right"
+            Foreground="#2E7D32"
+            Background="#E8F5E9"
+            Click="RightButton_Click"/>
+            <!-- Wrong Button -->
+            <Button x:Name="BtnWrong"
+            Style="{StaticResource StudyButtonStyle}"
+            Content="I got it wrong"
+            Foreground="#C62828"
+            Background="#FFEBEE"
+            Click="WrongButton_Click"/>
         </StackPanel>
 
         <!-- Footer Section -->

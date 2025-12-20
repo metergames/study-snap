@@ -56,7 +56,7 @@ namespace StudySnap
             // Step 2: Get the current card and update UI elements
             Flashcard currentCard = _session.GetNextCard();
             txtbFrontText.Text = currentCard.Front;
-            txtbBackText.Text = _isAnswerRevealed ? currentCard.Back : "???";
+            txtbBackText.Text = currentCard.Back;
 
             // Step 3: Update progress display in Footer (0 based so add 1)
             txtbCardCounter.Text = $"Card {_session.CurrentCardIndex + 1} of {_session.TotalCards}";
@@ -64,6 +64,10 @@ namespace StudySnap
             CorrectRun.Text = _session.CorrectCount.ToString();
             IncorrectRun.Text = (_session.CurrentCardIndex - _session.CorrectCount).ToString();
             ScoreRun.Text = $"{_session.CalculateCurrentScore():F0}%";
+
+            // Step 4: Update the visibility of answer elements
+            BtnRight.IsEnabled = false;
+            BtnWrong.IsEnabled = false;
 
             // Step 4: Reset the Card State (Hide answer)
             _isAnswerRevealed = false;
@@ -98,28 +102,17 @@ namespace StudySnap
 
             this.Close();
         }
-
-        private void ProcessAnswer(bool isCorrect)
-        {
-            if (!_isAnswerRevealed)
-            {
-                // Force reveal if answer not shown but pressed button
-                // Card_MouseDown(null, null);
-                // return;
-            }
-
-            _session.RecordAnswer(isCorrect); // Logic from
-            UpdateUI();
-        }
-
+        
         private void RightButton_Click(object sender, RoutedEventArgs e)
         {
-            ProcessAnswer(true);
+            _session.RecordAnswer(true);
+            UpdateUI();
         }
 
         private void WrongButton_Click(object sender, RoutedEventArgs e)
         {
-            ProcessAnswer(false);
+            _session.RecordAnswer(false);
+            UpdateUI();
         }
 
         // Logic: reveal the answer when the user clicks on the card
@@ -130,6 +123,9 @@ namespace StudySnap
                 _isAnswerRevealed = true;
                 txtbBackText.Visibility = Visibility.Visible;
                 ClickToRevealText.Visibility = Visibility.Hidden;
+                // Enable the answer buttons
+                BtnRight.IsEnabled = true;
+                BtnWrong.IsEnabled = true;
             }
         }
 
