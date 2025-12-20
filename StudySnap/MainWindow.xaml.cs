@@ -85,7 +85,70 @@ namespace StudySnap
 
         private void CreateDeckClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Clicked create deck");
+            NewDeckWindow newDeckWindow = new NewDeckWindow();
+            newDeckWindow.Owner = this;
+
+            this.Opacity = 0.4;
+            bool? setName = newDeckWindow.ShowDialog();
+            this.Opacity = 1;
+
+            if (setName == true)
+            {
+                Deck newDeck = new Deck(newDeckWindow.DeckName);
+                _decks.Add(newDeck);
+
+                _repository.SaveDecks(_decks, DECK_FILE_PATH);
+
+                OpenDeckEditor(newDeck);
+
+                RefreshDecks();
+                lstbDecks.SelectedItem = newDeck;
+            }
+        }
+
+        private void OpenDeckEditor(Deck deck)
+        {
+            string oldName = deck.Name;
+
+            DeckEditor deckEditor = new DeckEditor(deck);
+            deckEditor.Owner = this;
+
+            this.Hide(); // Hide dashboard
+            bool? saveData = deckEditor.ShowDialog();
+            this.Show(); // Show dashboard
+
+            if (saveData == true)
+            {
+                if (deck.Name != oldName)
+                    UpdateResultsNewDeckName(oldName, deck.Name);
+
+                _repository.SaveDecks(_decks, DECK_FILE_PATH);
+            }
+        }
+
+        private void UpdateResultsNewDeckName(string oldName, string newName)
+        {
+            try
+            {
+                List<StudySessionResult> studyResults = _repository.LoadSessionResults(RESULTS_FILE_PATH);
+                bool modifiedData = false;
+
+                foreach (StudySessionResult result in studyResults)
+                {
+                    if (result.DeckName == oldName)
+                    {
+                        result.DeckName = newName;
+                        modifiedData = true;
+                    }
+                }
+
+                if (modifiedData)
+                    _repository.SaveSessionResults(studyResults, RESULTS_FILE_PATH);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating history: {ex.Message}");
+            }
         }
 
         private void StartStudyClick(object sender, RoutedEventArgs e)
@@ -109,15 +172,7 @@ namespace StudySnap
             if (lstbDecks.SelectedItem != null)
             {
                 Deck selectedDeck = lstbDecks.SelectedItem as Deck;
-                DeckEditor editorWindow = new DeckEditor(selectedDeck);
-                editorWindow.Owner = this;
-
-                this.Hide(); // Hide dashboard
-                bool? saveData = editorWindow.ShowDialog();
-                this.Show(); // Show dashboard
-
-                if (saveData == true)
-                    _repository.SaveDecks(_decks, DECK_FILE_PATH);
+                OpenDeckEditor(selectedDeck);
 
                 RefreshDecks(lstbDecks.SelectedIndex);
             }

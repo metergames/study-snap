@@ -36,11 +36,12 @@
                            Foreground="#111827"/>
             </StackPanel>
 
-            <TextBlock Grid.Column="1" Text="{Binding Name}"
-                       FontSize="18" FontWeight="ExtraBold" Foreground="#1F2937"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                       TextTrimming="CharacterEllipsis" Margin="0,0,20,0"
-                       ToolTip="{Binding Name}"/>
+            <TextBox Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                     FontSize="18" FontWeight="ExtraBold" Foreground="#1F2937"
+                     HorizontalAlignment="Center" VerticalAlignment="Center"
+                     Background="Transparent" BorderThickness="0"
+                     Margin="0,0,20,0" TextAlignment="Center" MinWidth="100"
+                     ToolTip="Click to edit deck name"/>
 
             <StackPanel Grid.Column="2" Orientation="Horizontal"
                         VerticalAlignment="Center" Margin="0,0,35,0">
@@ -142,7 +143,8 @@
 
             <Button x:Name="btnDeleteCard" Click="DeleteCard"
                     Grid.Row="3" Height="32" Margin="7,5,7,0"
-                    BorderThickness="0" Cursor="Hand">
+                    BorderThickness="0" Cursor="Hand"
+                    IsEnabled="False">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="15"/>
@@ -151,10 +153,11 @@
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
                             VerticalAlignment="Center">
-                    <Image Source="/Images/trash-fill-red.png"
+                    <Image x:Name="imgTrash"
+                           Source="/Images/trash-fill-gray.png"
                            Width="20" Height="20" Margin="0,0,8,0"/>
 
-                    <TextBlock Text="Delete Card" Foreground="#DC2626"
+                    <TextBlock Text="Delete Card"
                                FontSize="12.5" FontWeight="Bold"
                                VerticalAlignment="Center"/>
                 </StackPanel>
@@ -162,6 +165,7 @@
                 <Button.Style>
                     <Style TargetType="Button">
                         <Setter Property="Background" Value="#FEE2E2"/>
+                        <Setter Property="Foreground" Value="#DC2626"/>
 
                         <Setter Property="Template">
                             <Setter.Value>
@@ -180,6 +184,11 @@
 
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter Property="Background" Value="#FCB1B1"/>
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#F4F4F4"/>
+                                <Setter Property="Foreground" Value="#C4C4C4"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>

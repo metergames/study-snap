@@ -65,6 +65,9 @@ namespace StudySnap
                 lblPreview.Text = card.Front;
 
                 btnSaveCard.Content = "Save Card"; // Save button action - Overwrite
+
+                btnDeleteCard.IsEnabled = true;
+                imgTrash.Source = new BitmapImage(new Uri("/Images/trash-fill-red.png", UriKind.Relative));
             }
         }
 
@@ -82,6 +85,9 @@ namespace StudySnap
             lblPreview.Text = "";
 
             btnSaveCard.Content = "Add Card"; // Save button action - Add
+
+            btnDeleteCard.IsEnabled = false;
+            imgTrash.Source = new BitmapImage(new Uri("/Images/trash-fill-gray.png", UriKind.Relative));
         }
 
         private void FrontTextChanged(object sender, TextChangedEventArgs e)
