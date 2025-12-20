@@ -96,6 +96,8 @@ namespace StudySnap
             if (setName == true)
             {
                 Deck newDeck = new Deck(newDeckWindow.DeckName);
+                newDeck.IconPath = newDeckWindow.SelectedIcon;
+
                 _decks.Add(newDeck);
 
                 _repository.SaveDecks(_decks, DECK_FILE_PATH);

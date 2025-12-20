@@ -41,6 +41,10 @@ namespace StudySnap
 
             // Set initial UI state
             txtbDeckTitle.Text = $"Deck: {deck.Name}";
+
+            if (!string.IsNullOrWhiteSpace(deck.IconPath))
+                imgDeckIcon.Source = new BitmapImage(new Uri(deck.IconPath, UriKind.Relative));
+
             UpdateUI();
         }
 

@@ -24,8 +24,11 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <!-- Insert Logo Here -->
-                <TextBlock x:Name="txtbDeckTitle" Text="Deck: French Verbs" FontSize="18" FontWeight="Bold" Foreground="#1C2B45"/>
+                <Image x:Name="imgDeckIcon" Width="24" Height="24"
+                       Margin="0,0,10,0" RenderOptions.BitmapScalingMode="NearestNeighbor"
+                       VerticalAlignment="Center"/>
+
+                <TextBlock x:Name="txtbDeckTitle" Text="Deck: Name" FontSize="18" FontWeight="Bold" Foreground="#1C2B45"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">

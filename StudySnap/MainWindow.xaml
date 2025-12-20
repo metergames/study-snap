@@ -100,7 +100,10 @@
                                     CornerRadius="40" Background="#F3F4F6"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center">
-                                <!-- Icon -->
+                                <Image x:Name="imgDeckIcon"
+                                       Source="{Binding IconPath, Converter={StaticResource IconToGrayConverter}}"
+                                       Width="24" Height="24" Stretch="Uniform"
+                                       RenderOptions.BitmapScalingMode="NearestNeighbor"/>
                             </Border>
 
                             <StackPanel VerticalAlignment="Center" Grid.Column="1"
@@ -119,6 +122,8 @@
                         <DataTemplate.Triggers>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
                                 <Setter TargetName="icnBorder" Property="Background" Value="#BCD0F9"/>
+
+                                <Setter TargetName="imgDeckIcon" Property="Source" Value="{Binding IconPath}"/>
                             </DataTrigger>
                         </DataTemplate.Triggers>
                     </DataTemplate>
@@ -248,18 +253,23 @@
 
             <Grid Grid.Row="0" Margin="0,0,0,30">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0"
+                <Image Grid.Column="0" Source="{Binding SelectedItem.IconPath, ElementName=lstbDecks}"
+                       Width="24" Height="24" Margin="0,0,10,0"
+                       VerticalAlignment="Center" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+
+                <TextBlock Grid.Column="1"
                            Text="{Binding SelectedItem.Name, ElementName=lstbDecks}"
                            FontSize="24" FontWeight="Bold" Foreground="#111827"
                            VerticalAlignment="Center" TextWrapping="NoWrap"
                            TextTrimming="CharacterEllipsis"
                            ToolTip="{Binding SelectedItem.Name, ElementName=lstbDecks}"/>
 
-                <Border Grid.Column="1" Background="#E7EEFD" CornerRadius="10" Padding="10,3"
+                <Border Grid.Column="2" Background="#E7EEFD" CornerRadius="10" Padding="10,3"
                         Margin="15,0,0,0" VerticalAlignment="Center">
                     <TextBlock Text="{Binding SelectedItem.Cards.Count, ElementName=lstbDecks, StringFormat='Total cards: {0}'}"
                                Foreground="#135BEC" FontWeight="SemiBold" FontSize="11"/>

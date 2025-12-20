@@ -30,15 +30,27 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Orientation="Horizontal"
-                        VerticalAlignment="Center" Margin="35,0,25,0">
-                <TextBlock Text="StudySnap" FontSize="20" FontFamily="Segoe UI Black"
-                           Foreground="#111827"/>
-            </StackPanel>
+            <ComboBox Grid.Column="0"
+                      Style="{StaticResource TransparentComboBoxStyle}"
+                      HorizontalAlignment="Left" VerticalAlignment="Center"
+                      Margin="25,0,0,0" Width="40" Height="35"
+                      VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                      ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=IconsList}"
+                      SelectedItem="{Binding IconPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      ToolTip="Click to change deck icon">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,2">
+                            <Image Source="{Binding}" Width="24" Height="24" 
+                                   RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                        </Grid>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
             <TextBox Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                      FontSize="18" FontWeight="ExtraBold" Foreground="#1F2937"
-                     HorizontalAlignment="Center" VerticalAlignment="Center"
+                     HorizontalAlignment="Left" VerticalAlignment="Center"
                      Background="Transparent" BorderThickness="0"
                      Margin="0,0,20,0" TextAlignment="Center" MinWidth="100"
                      ToolTip="Click to edit deck name"/>
@@ -110,8 +122,10 @@
                                     CornerRadius="30" Background="#F3F4F6"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center">
-                                <Image x:Name="imgIcon" Source="/Images/cards-three-gray.png"
-                                       Width="18" Height="18" Stretch="Uniform"/>
+                                <Image x:Name="imgIcon" Source="/Images/cards-three-dark-gray.png"
+                                       Width="18" Height="18" Stretch="Uniform"
+                                       RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
 
                             <StackPanel VerticalAlignment="Center" Grid.Column="1"

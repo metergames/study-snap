@@ -25,11 +25,14 @@ namespace StudySnap
         private bool _unsavedChanges = false;
 
         public bool WillDelete { get; private set; } = false;
+        public List<string> IconsList { get; set; }
 
         public DeckEditor(Deck deck)
         {
             InitializeComponent();
             _currentDeck = deck;
+
+            IconsList = App.AvailableIcons;
 
             this.DataContext = deck; // Make deck data viewable directly from XAML
 

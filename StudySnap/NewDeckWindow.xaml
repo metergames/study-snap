@@ -21,8 +21,26 @@
             <TextBlock Text="Name your new deck" FontSize="18" FontWeight="Bold"
                        Foreground="#111827" Margin="0,0,0,10"/>
 
-            <StackPanel Grid.Row="1" VerticalAlignment="Center">
-                <TextBox x:Name="txtbDeckName" FontSize="14" Padding="10"
+            <Grid Grid.Row="1" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox x:Name="cmbIcons" Grid.Column="0" 
+                          Style="{StaticResource TransparentComboBoxStyle}" 
+                          Width="40" Height="35" Margin="0,0,10,0"
+                          SelectedIndex="0" ToolTip="Click to change deck icon"
+                          VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding}" Width="24" Height="24" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBox x:Name="txtbDeckName" Grid.Column="1"
+                         FontSize="14" Padding="10"
                          VerticalContentAlignment="Center"
                          BorderThickness="1" BorderBrush="#D1D5DB"
                          Background="#F9FAFB">
@@ -32,23 +50,70 @@
                         </Style>
                     </TextBox.Resources>
                 </TextBox>
-            </StackPanel>
+            </Grid>
 
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right"
                         Margin="0,10,0,0">
                 <Button Content="Cancel" Click="CancelClick" Width="80"
-                        Height="35" Margin="0,0,10,0" Background="Transparent"
-                        BorderThickness="0" Foreground="#6B7280" FontWeight="SemiBold"
-                        Cursor="Hand"/>
+                        Height="35" Margin="0,0,10,0">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="#6B7280"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="#545964"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Foreground" Value="#3D4048"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
 
                 <Button Content="Create" Click="CreateClick" Width="100"
-                        Height="35" Background="#135BEC" Foreground="White"
-                        FontWeight="Bold" BorderThickness="0" Cursor="Hand">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="17"/>
+                        Height="35" BorderThickness="0" IsDefault="True">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#135BEC"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="17">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#0F49BD"/>
+                                    <Setter Property="Foreground" Value="#E6E6E6"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="#0B378E"/>
+                                    <Setter Property="Foreground" Value="#CCCCCC"/>
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
-                    </Button.Resources>
+                    </Button.Style>
                 </Button>
             </StackPanel>
         </Grid>

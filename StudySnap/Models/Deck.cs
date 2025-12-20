@@ -11,6 +11,7 @@ namespace StudySnap.Models
     {
         private string _name;
         private List<Flashcard> _cards;
+        private string _iconPath;
 
         /// <summary>
         /// Name of the deck. Cannot be empty.
@@ -42,6 +43,11 @@ namespace StudySnap.Models
         }
 
         /// <summary>
+        /// Path to the deck's icon.
+        /// </summary>
+        public string IconPath { get; set; }
+
+        /// <summary>
         /// Initializes a new deck with the specified name and an empty flashcard list.
         /// The name is required and the deck is created ready for editing and adding flashcards.
         /// </summary>
@@ -50,6 +56,7 @@ namespace StudySnap.Models
         {
             Name = name;
             Cards = new List<Flashcard>();
+            IconPath = "/Images/cards-three-blue.png";
         }
 
         /// <summary>
