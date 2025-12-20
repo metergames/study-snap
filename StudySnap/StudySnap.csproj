@@ -6,17 +6,26 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Images\StudySnap Logo 256.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Images\cards-three-blue.png" />
     <None Remove="Images\cards-three-gray.png" />
+    <None Remove="Images\StudySnap Logo 256.ico" />
+    <None Remove="Images\StudySnap Logo 30.png" />
     <None Remove="Images\trash-fill-gray.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Images\StudySnap Logo 256.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Images\cards-three-blue.png" />
     <Resource Include="Images\cards-three-gray.png" />
+    <Resource Include="Images\StudySnap Logo 256.ico" />
+    <Resource Include="Images\StudySnap Logo 30.png" />
     <Resource Include="Images\trash-fill-gray.png" />
     <Resource Include="Images\trash-fill-red.png" />
   </ItemGroup>

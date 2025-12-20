@@ -23,10 +23,14 @@
 
 
         <!-- Title bar -->
-        <Label Content="StudySnap" Grid.Row="0" Grid.ColumnSpan="2"
-               VerticalAlignment="Center" FontSize="20"
-               FontFamily="Segoe UI Black" Margin="35,0,0,0"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0"
+                    Grid.ColumnSpan="2" Margin="35,5">
+            <Image Height="30" Width="30" Source="/Images/StudySnap Logo 30.png"/>
 
+            <Label Content="StudySnap" Margin="7,0,0,0"
+                   VerticalAlignment="Center" FontSize="20"
+                   FontFamily="Segoe UI Black"/>
+        </StackPanel>
 
         <!-- Deck Panel -->
         <Rectangle Grid.Row="1" Grid.Column="0" Fill="White"

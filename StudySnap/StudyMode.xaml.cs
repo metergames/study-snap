@@ -31,6 +31,7 @@ namespace StudySnap
             if (deck == null || deck.Cards.Count == 0)
             {
                 MessageBox.Show("The selected deck is empty or invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                DialogResult = false;
                 this.Close();
                 return;
             }
@@ -100,6 +101,7 @@ namespace StudySnap
                              $"Total: {result.TotalCards}";
             MessageBox.Show(message, "Summary", MessageBoxButton.OK, MessageBoxImage.Information);
 
+            DialogResult = true;
             this.Close();
         }
         

@@ -33,7 +33,9 @@ namespace StudySnap.Models
             }
             catch (Exception)
             {
-                return new List<Deck>();
+                List<Deck> emptyList = new List<Deck>();
+                SaveDecks(emptyList, filePath);
+                return emptyList;
             }
         }
 
@@ -50,6 +52,9 @@ namespace StudySnap.Models
 
             if (string.IsNullOrWhiteSpace(filePath))
                 throw new ArgumentException("File path cannot be empty.");
+
+            if (!Directory.Exists("Data"))
+                Directory.CreateDirectory("Data");
 
             string jsonData = JsonSerializer.Serialize(decks);
             File.WriteAllText(filePath, jsonData);
@@ -76,7 +81,9 @@ namespace StudySnap.Models
             }
             catch (Exception)
             {
-                return new List<StudySessionResult>();
+                List<StudySessionResult> emptyList = new List<StudySessionResult>();
+                SaveSessionResults(emptyList, filePath);
+                return emptyList;
             }
         }
 

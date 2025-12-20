@@ -23,8 +23,8 @@ namespace StudySnap
     {
         private DataRepository _repository;
         private List<Deck> _decks;
-        private const string DECK_FILE_PATH = "C:\\Users\\User\\Desktop\\decks.json";
-        public const string RESULTS_FILE_PATH = "C:\\Users\\User\\Desktop\\session_results.json";
+        private const string DECK_FILE_PATH = @"Data\decks.json";
+        public const string RESULTS_FILE_PATH = @"Data\session_results.json";
 
         public MainWindow()
         {
@@ -126,7 +126,7 @@ namespace StudySnap
                 RefreshDecks();
                 return;
             }
-
+            
             if (saveData == true)
             {
                 if (deck.Name != oldName)

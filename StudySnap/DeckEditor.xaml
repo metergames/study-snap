@@ -58,12 +58,6 @@
                         Background="#135BEC" Foreground="White"
                         FontSize="12" FontWeight="Bold" Margin="0,10" Padding="15,0"
                         VerticalContentAlignment="Center" Click="SaveDeckClick"/>
-
-                <Button Style="{StaticResource RoundedButtonGray18}"
-                        Content="Cancel" Height="29" BorderThickness="0"
-                        Background="#E5E7EB" Foreground="#1F2937"
-                        FontSize="12" FontWeight="Bold" Margin="10,10,0,10" Padding="15,0"
-                        VerticalContentAlignment="Center" Click="CancelClick"/>
             </StackPanel>
         </Grid>
 

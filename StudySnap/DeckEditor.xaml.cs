@@ -127,11 +127,6 @@ namespace StudySnap
             AttemptClose(false);
         }
 
-        private void CancelClick(object sender, RoutedEventArgs e)
-        {
-            AttemptClose(false);
-        }
-
         private void AttemptClose(bool isSaving)
         {
             if (isSaving)
@@ -192,6 +187,7 @@ namespace StudySnap
             if (MessageBox.Show($"Are you sure you want to delete the {_currentDeck.Name} deck?\n\nThis will also permanently delete all study records and statistics for this deck.", "Delete Deck", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 WillDelete = true;
+                DialogResult = false;
                 this.Close();
             }
         }
