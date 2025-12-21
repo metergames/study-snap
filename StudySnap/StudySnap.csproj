@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+	<UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>Images\StudySnap Logo 256.ico</ApplicationIcon>
   </PropertyGroup>
 
@@ -215,6 +216,10 @@
     <None Remove="Images\wifi-high-gray.png" />
     <None Remove="Images\wrench-blue.png" />
     <None Remove="Images\wrench-gray.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CircularProgressBar" Version="2.8.0.16" />
   </ItemGroup>
 
   <ItemGroup>

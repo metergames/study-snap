@@ -45,7 +45,7 @@ namespace StudySnap
         {
             if (string.IsNullOrWhiteSpace(txtbDeckName.Text))
             {
-                MessageBox.Show("Please enter a deck name.");
+                System.Windows.MessageBox.Show("Please enter a deck name.");
                 return;
             }
 

@@ -4,8 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudySnap"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:cpb="clr-namespace:CircularProgressBar;assembly=CircularProgressBar"
         mc:Ignorable="d"
         Title="Study Mode" Height="700" Width="900" Background="#F6F6F8"
+        MinWidth="600" MinHeight="500"
         WindowStartupLocation="CenterOwner" Closing="StudyModeWindowClosing">
     <Grid>
         <!-- Define Rows -->
@@ -33,6 +36,23 @@
 
             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock x:Name="txtbCardCounter" Text="Card - of -" VerticalAlignment="Center" Foreground="#546E7A" Margin="0,0,15,0" FontWeight="SemiBold"/>
+                <WindowsFormsHost Width="40" Height="40">
+                    <cpb:CircularProgressBar x:Name="WinFormsCircularBar"                                                                              
+                                 Value="0"
+                                 Maximum="100"
+                                 Minimum="0"
+                                 StartAngle="270"
+                                 ProgressColor= "#0F49BD"
+                                 ForeColor="Transparent"
+                                 OuterWidth="4"
+                                 ProgressWidth="4"
+                                 OuterMargin="-5"
+                                 AnimationSpeed="500"
+                                 SuperscriptText=""
+                                 SubscriptText=""
+                                 Text=""
+                                 />
+                </WindowsFormsHost>
             </StackPanel>
 
         </Grid>
@@ -45,27 +65,29 @@
                 <DropShadowEffect Color="Gray" BlurRadius="20" ShadowDepth="5" Opacity="0.1"/>
             </Border.Effect>
             <!-- Flashcard Content -->
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <!-- front of card content (question) -->
-                <TextBlock Text="FRONT" Foreground="#9DA8B8" FontSize="12" FontWeight="Bold"
+            <Viewbox Stretch="Uniform">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <!-- front of card content (question) -->
+                    <TextBlock Text="FRONT" Foreground="#9DA8B8" FontSize="12" FontWeight="Bold"
                    HorizontalAlignment="Center"/>
-                <TextBlock x:Name="txtbFrontText" Text="Parler" FontSize="32" FontWeight="Bold" Foreground="#1C2B45"
-                   HorizontalAlignment="Center" Margin="0,10,0,30"
+                    <TextBlock x:Name="txtbFrontText" Text="Parler" FontSize="32" FontWeight="Bold" Foreground="#1C2B45"
+                   HorizontalAlignment="Center" Margin="30,10,30,30"
                            TextWrapping="Wrap"/>
 
-                <!-- Border to split sides -->
-                <Border Height="1" Background="#E0E6ED" Width="300" Margin="0,0,0,30"/>
+                    <!-- Border to split sides -->
+                    <Border Height="1" Background="#E0E6ED" MaxWidth="300" Margin="0,0,0,30"/>
 
-                <!-- Back of card content (answer) -->
-                <TextBlock Text="BACK" Foreground="#9DA8B8" FontSize="12" FontWeight="Bold"
+                    <!-- Back of card content (answer) -->
+                    <TextBlock Text="BACK" Foreground="#9DA8B8" FontSize="12" FontWeight="Bold"
                    HorizontalAlignment="Center"/>
-                <TextBlock x:Name="txtbBackText" Text="To speak" FontSize="32" FontWeight="Bold" Foreground="#1C2B45"
-                   HorizontalAlignment="Center" Margin="0,10,0,0"
+                    <TextBlock x:Name="txtbBackText" Text="To speak" FontSize="32" FontWeight="Bold" Foreground="#1C2B45"
+                   HorizontalAlignment="Center" Margin="30,10,30,30"
                            TextWrapping="Wrap"/>
 
-                <TextBlock x:Name="ClickToRevealText" Text="(Click card to reveal)" Foreground="#B0BEC5"
+                    <TextBlock x:Name="ClickToRevealText" Text="(Click card to reveal)" Foreground="#B0BEC5"
                            FontSize="14" HorizontalAlignment="Center" Margin="0,20,0,0"/>
-            </StackPanel>
+                </StackPanel>
+            </Viewbox>
         </Border>
 
         <!-- Action Buttons Panel -->

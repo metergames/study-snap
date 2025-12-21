@@ -150,7 +150,7 @@ namespace StudySnap
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error deleting removed deck's history: {ex.Message}");
+                System.Windows.MessageBox.Show($"Error deleting removed deck's history: {ex.Message}");
             }
         }
 
@@ -175,7 +175,7 @@ namespace StudySnap
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating history: {ex.Message}");
+                System.Windows.MessageBox.Show($"Error updating history: {ex.Message}");
             }
         }
 
@@ -208,7 +208,7 @@ namespace StudySnap
 
         private void ExitButtonClick(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
         }
 
         /// <summary>

@@ -104,7 +104,7 @@ namespace StudySnap
         {
             if (string.IsNullOrWhiteSpace(txtFront.Text.Trim()) || string.IsNullOrWhiteSpace(txtBack.Text.Trim()))
             {
-                MessageBox.Show("Both front and back are required", "Validation Error");
+                System.Windows.MessageBox.Show("Both front and back are required", "Validation Error");
                 return;
             }
 
@@ -166,7 +166,7 @@ namespace StudySnap
             if (!_unsavedChanges)
                 return true;
 
-            return MessageBox.Show("You have unsaved changes. Are you sure you want to discard them?", "Unsaved Changes", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
+            return System.Windows.MessageBox.Show("You have unsaved changes. Are you sure you want to discard them?", "Unsaved Changes", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
         }
 
         private void DeleteCard(object sender, RoutedEventArgs e)
@@ -174,7 +174,7 @@ namespace StudySnap
             if (_selectedCard == null)
                 return;
 
-            if (MessageBox.Show("Are you sure you want to delete this card?", "Delete Card", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (System.Windows.MessageBox.Show("Are you sure you want to delete this card?", "Delete Card", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 _currentDeck.RemoveCard(_selectedCard);
 
@@ -187,7 +187,7 @@ namespace StudySnap
 
         private void DeleteDeckClick(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show($"Are you sure you want to delete the {_currentDeck.Name} deck?\n\nThis will also permanently delete all study records and statistics for this deck.", "Delete Deck", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (System.Windows.MessageBox.Show($"Are you sure you want to delete the {_currentDeck.Name} deck?\n\nThis will also permanently delete all study records and statistics for this deck.", "Delete Deck", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 WillDelete = true;
                 DialogResult = false;
