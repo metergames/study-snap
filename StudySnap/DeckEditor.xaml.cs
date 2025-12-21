@@ -176,7 +176,7 @@ namespace StudySnap
         }
 
         /// <summary>
-        /// Logic to handle window closing. 
+        /// Logic to handle window closing.
         /// Sets the DialogResult based on whether the data is being saved or discarded.
         /// </summary>
         /// <param name="isSaving">If set to true, the changes are accepted and the window closes with a true DialogResult</param>

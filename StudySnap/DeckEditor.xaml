@@ -41,7 +41,7 @@
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="0,2">
-                            <Image Source="{Binding}" Width="24" Height="24" 
+                            <Image Source="{Binding}" Width="24" Height="24"
                                    RenderOptions.BitmapScalingMode="NearestNeighbor"/>
                         </Grid>
                     </DataTemplate>

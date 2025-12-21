@@ -147,7 +147,7 @@ namespace StudySnap
                 RefreshDecks();
                 return;
             }
-            
+
             if (saveData == true)
             {
                 if (deck.Name != oldName)

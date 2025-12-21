@@ -74,7 +74,7 @@ namespace StudySnap
                 FinishSession();
                 return;
             }
-            // Check for percentage 
+            // Check for percentage
             int percentage = (int)((double)(_session.CurrentCardIndex + 1) / _session.TotalCards * 100);
 
             // Step 2: Get the current card and update UI elements

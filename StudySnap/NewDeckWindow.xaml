@@ -27,8 +27,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <ComboBox x:Name="cmbIcons" Grid.Column="0" 
-                          Style="{StaticResource TransparentComboBoxStyle}" 
+                <ComboBox x:Name="cmbIcons" Grid.Column="0"
+                          Style="{StaticResource TransparentComboBoxStyle}"
                           Width="40" Height="35" Margin="0,0,10,0"
                           SelectedIndex="0" ToolTip="Click to change deck icon"
                           VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
