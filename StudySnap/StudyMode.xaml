@@ -4,12 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudySnap"
-        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
-        xmlns:cpb="clr-namespace:CircularProgressBar;assembly=CircularProgressBar"
+        xmlns:xrpb="http://XamlRadialProgressBar/DotNet"
         mc:Ignorable="d"
         Title="Study Mode" Height="700" Width="900" Background="#F6F6F8"
         MinWidth="600" MinHeight="500"
-        WindowStartupLocation="CenterOwner" Closing="StudyModeWindowClosing">
+        WindowStartupLocation="CenterOwner" Closing="StudyModeWindowClosing"
+        MouseDown="Window_MouseDown">
     <Grid>
         <!-- Define Rows -->
         <Grid.RowDefinitions>
@@ -36,25 +36,12 @@
 
             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock x:Name="txtbCardCounter" Text="Card - of -" VerticalAlignment="Center" Foreground="#546E7A" Margin="0,0,15,0" FontWeight="SemiBold"/>
-                <WindowsFormsHost Width="40" Height="40">
-                    <cpb:CircularProgressBar x:Name="WinFormsCircularBar"                                                                              
-                                 Value="0"
-                                 Maximum="100"
-                                 Minimum="0"
-                                 StartAngle="270"
-                                 ProgressColor= "#0F49BD"
-                                 ForeColor="Transparent"
-                                 OuterWidth="4"
-                                 ProgressWidth="4"
-                                 OuterMargin="-5"
-                                 AnimationSpeed="500"
-                                 SuperscriptText=""
-                                 SubscriptText=""
-                                 Text=""
-                                 />
-                </WindowsFormsHost>
+                
+                <xrpb:RadialProgressBar x:Name="WinFormsCircularBar"
+			                            Width="40" Height="40"
+			                            Foreground="#0F49BD"
+                                        ArcWidth="5"/>
             </StackPanel>
-
         </Grid>
 
         <!-- Flashcard Display Area -->

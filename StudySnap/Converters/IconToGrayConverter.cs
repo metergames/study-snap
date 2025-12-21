@@ -1,4 +1,8 @@
-﻿using System.Globalization;
+﻿/* Ryan Morov & Felipe Mesa Paredes
+ * 2492176 & 2466265
+ * Project - Flashcard Study App
+ */
+using System.Globalization;
 using System.Windows.Data;
 
 namespace StudySnap.Converters

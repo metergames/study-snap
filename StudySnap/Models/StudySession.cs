@@ -51,9 +51,8 @@ namespace StudySnap.Models
         public StudySession (Deck deck)
         {
             if (deck == null)
-            {
                 throw new ArgumentException("Study session requires a valid deck.");
-            }
+
             CurrentDeck = deck;
             CurrentCardIndex = 0;
             CorrectCount = 0;
@@ -67,9 +66,8 @@ namespace StudySnap.Models
         public Flashcard GetNextCard()
         {
             if (HasMoreCards())
-            {
                 return CurrentDeck.Cards[CurrentCardIndex];
-            }
+
             return null;
         }
 
@@ -89,9 +87,8 @@ namespace StudySnap.Models
         public void RecordAnswer(bool isCorrect)
         {
             if (isCorrect)
-            {
                 CorrectCount++;
-            }
+
             CurrentCardIndex++;
         }
 
@@ -101,13 +98,17 @@ namespace StudySnap.Models
         /// <returns>Returns a double representing the percentage of correct answers or returns 0 if the TotalCards is 0.</returns>
         public double CalculateScore()
         {
-            if (TotalCards == 0) return 0;
+            if (TotalCards == 0)
+                return 0;
+
             return (double)CorrectCount / TotalCards * 100;
         }
 
         public double CalculateCurrentScore()
         {
-            if (CurrentCardIndex == 0) return 0;
+            if (CurrentCardIndex == 0)
+                return 0;
+
             return (double)CorrectCount / CurrentCardIndex * 100;
         }
 
@@ -117,11 +118,11 @@ namespace StudySnap.Models
         public void ShuffleDeck()
         {
             if(CurrentDeck.Cards == null || CurrentDeck.Cards.Count <= 1)
-            {
                 return;
-            }
+
             Random r = new Random();
             int cardCount = CurrentDeck.Cards.Count;
+
             while (cardCount > 1)
             {
                 cardCount--;

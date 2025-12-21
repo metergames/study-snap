@@ -18,18 +18,28 @@ namespace StudySnap
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
+    /// Main dashboard for the application, handling deck management, navigatoin and statistics display.
     /// </summary>
     public partial class MainWindow : Window
     {
         private DataRepository _repository;
         private List<Deck> _decks;
+
+        /// <summary>
+        /// Relative path to the file storing deck data.
+        /// </summary>
         private const string DECK_FILE_PATH = @"Data\decks.json";
+
+        /// <summary>
+        /// Relative path to the file storing study session results.
+        /// </summary>
         public const string RESULTS_FILE_PATH = @"Data\session_results.json";
 
         public MainWindow()
         {
             InitializeComponent();
 
+            // Set up the data repository and load the initial list of decks.
             _repository = new DataRepository();
             _decks = new List<Deck>();
 
@@ -84,6 +94,10 @@ namespace StudySnap
             }
         }
 
+        /// <summary>
+        /// Handles the Click event for the "Create Deck" button.
+        /// Opens a dialog to creates a new deck and saves it to the repository.
+        /// </summary>
         private void CreateDeckClick(object sender, RoutedEventArgs e)
         {
             NewDeckWindow newDeckWindow = new NewDeckWindow();
@@ -109,6 +123,11 @@ namespace StudySnap
             }
         }
 
+        /// <summary>
+        /// Opens the Deck Editor window for the specified deck.
+        /// Handles logic for saving changes, deleting the deck, or updating the deck name in history.
+        /// </summary>
+        /// <param name="deck">The Deck object to edit</param>
         private void OpenDeckEditor(Deck deck)
         {
             string oldName = deck.Name;
@@ -138,6 +157,10 @@ namespace StudySnap
             }
         }
 
+        /// <summary>
+        /// Removes all study session results associated with a deleted deck.
+        /// </summary>
+        /// <param name="name">The name of the deck being deleted</param>
         private void DeleteDeckHistory(string name)
         {
             try
@@ -150,10 +173,15 @@ namespace StudySnap
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show($"Error deleting removed deck's history: {ex.Message}");
+                MessageBox.Show($"Error deleting removed deck's history: {ex.Message}");
             }
         }
 
+        /// <summary>
+        /// Updates the deck name in the historical study results when a deck is renamed.
+        /// </summary>
+        /// <param name="oldName">The original name of the deck</param>
+        /// <param name="newName">The new name of the deck</param>
         private void UpdateResultsNewDeckName(string oldName, string newName)
         {
             try
@@ -175,10 +203,14 @@ namespace StudySnap
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show($"Error updating history: {ex.Message}");
+                MessageBox.Show($"Error updating history: {ex.Message}");
             }
         }
 
+        /// <summary>
+        /// Handles the Click event for the "Start Study" button.
+        /// Launches the study mode window for the currently selected deck.
+        /// </summary>
         private void StartStudyClick(object sender, RoutedEventArgs e)
         {
             if (lstbDecks.SelectedItem != null)
@@ -195,6 +227,10 @@ namespace StudySnap
             }
         }
 
+        /// <summary>
+        /// Handles the Click event for the "Edit Deck" button.
+        /// Opens the editor for the currently selected deck.
+        /// </summary>
         private void EditDeckClick(object sender, RoutedEventArgs e)
         {
             if (lstbDecks.SelectedItem != null)
@@ -206,6 +242,10 @@ namespace StudySnap
             }
         }
 
+        /// <summary>
+        /// Handles the Click event for the "Exit" button.
+        /// Shuts down the application.
+        /// </summary>
         private void ExitButtonClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
@@ -220,11 +260,19 @@ namespace StudySnap
                 this.DragMove();
         }
 
+        /// <summary>
+        /// Handles the TextChanged event for the search box.
+        /// Triggers the filtering of the deck list.
+        /// </summary>
         private void SearchBoxTextChanged(object sender, TextChangedEventArgs e)
         {
             FilterBySearch();
         }
 
+        /// <summary>
+        /// Filters the displayed decks based on the text entered in the search box.
+        /// Updates the visibility of the "No Decks" label based on the search results.
+        /// </summary>
         private void FilterBySearch()
         {
             if (_decks == null || _decks.Count == 0)
@@ -249,6 +297,10 @@ namespace StudySnap
             }
         }
 
+        /// <summary>
+        /// Handles the SelectionChanged event for the deck list.
+        /// Enables or disables the "Start Study" button based on whether the selected deck has cards.
+        /// </summary>
         private void DeckSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Deck currentDeck = lstbDecks.SelectedItem as Deck;

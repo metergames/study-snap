@@ -45,7 +45,11 @@ namespace StudySnap.Models
         /// <summary>
         /// Path to the deck's icon.
         /// </summary>
-        public string IconPath { get; set; }
+        public string IconPath
+        {
+            get { return _iconPath; }
+            set { _iconPath = value; }
+        }
 
         /// <summary>
         /// Initializes a new deck with the specified name and an empty flashcard list.
@@ -82,7 +86,7 @@ namespace StudySnap.Models
         }
 
         /// <summary>
-        /// Calculated functions, used for UI purposes, no need for validation
+        /// Calculated functions, used for statistics on dashboard, no need for validation.
         /// </summary>
         public string LastStudiedDisplay { get; set; } = "-";
 

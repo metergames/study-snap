@@ -1,4 +1,8 @@
-﻿using System.Configuration;
+﻿/* Ryan Morov & Felipe Mesa Paredes
+ * 2492176 & 2466265
+ * Project - Flashcard Study App
+ */
+using System.Configuration;
 using System.Data;
 using System.Windows;
 
@@ -9,6 +13,9 @@ namespace StudySnap
     /// </summary>
     public partial class App : System.Windows.Application
     {
+        /// <summary>
+        /// List of available icons to choose from for decks.
+        /// </summary>
         public static List<string> AvailableIcons { get; } = new List<string>
         {
             "/Images/cards-three-blue.png",
