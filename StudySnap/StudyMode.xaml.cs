@@ -13,6 +13,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using StudySnap.Models;
@@ -27,6 +28,8 @@ namespace StudySnap
     {
         private StudySession _session;
         private bool _isAnswerRevealed = false;
+        private bool _isAnimating = false;
+        private Storyboard _currentStoryboard;
 
         /// <summary>
         /// Constructor that takes a Deck object to initialize the study session.
@@ -35,6 +38,9 @@ namespace StudySnap
         public StudyMode(Deck deck)
         {
             InitializeComponent();
+
+            // Update clip geometry when window size changes for proper rounded corners
+            this.SizeChanged += StudyMode_SizeChanged;
 
             if (deck == null || deck.Cards.Count == 0)
             {
@@ -57,6 +63,23 @@ namespace StudySnap
         }
 
         /// <summary>
+        /// Updates the clip geometry when the window is resized to maintain rounded corners.
+        /// </summary>
+        private void StudyMode_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var border = this.Content as Border;
+            if (border != null)
+            {
+                border.Clip = new RectangleGeometry
+                {
+                    RadiusX = 15,
+                    RadiusY = 15,
+                    Rect = new Rect(0, 0, e.NewSize.Width, e.NewSize.Height)
+                };
+            }
+        }
+
+        /// <summary>
         /// Updates the UI elements based on the current state of the study session.
         /// Checks if the session is complete, updates the progress indicators, and refreshes the current card view.
         /// </summary>
@@ -74,30 +97,98 @@ namespace StudySnap
                 FinishSession();
                 return;
             }
-            // Check for percentage
+
+            // Step 2: Reset the card to front side before showing new card content
+            ResetCardToFront();
+
+            // Calculate percentage
             int percentage = (int)((double)(_session.CurrentCardIndex + 1) / _session.TotalCards * 100);
 
-            // Step 2: Get the current card and update UI elements
+            // Step 3: Get the current card and update UI elements
             Flashcard currentCard = _session.GetNextCard();
             txtbFrontText.Text = currentCard.Front;
             txtbBackText.Text = currentCard.Back;
             WinFormsCircularBar.Value = percentage;
 
-            // Step 3: Update progress display in Footer (0 based so add 1)
+            // Step 4: Update progress display in Footer (0 based so add 1)
             txtbCardCounter.Text = $"Card {_session.CurrentCardIndex + 1} of {_session.TotalCards}";
 
             CorrectRun.Text = _session.CorrectCount.ToString();
             IncorrectRun.Text = (_session.CurrentCardIndex - _session.CorrectCount).ToString();
             ScoreRun.Text = $"{_session.CalculateCurrentScore():F0}%";
 
-            // Step 4: Update the visibility of answer elements
+            // Step 5: Disable answer buttons until card is revealed
             BtnRight.IsEnabled = false;
             BtnWrong.IsEnabled = false;
+        }
 
-            // Step 4: Reset the Card State (Hide answer)
+        /// <summary>
+        /// Plays the flip animation to reveal the back of the card.
+        /// </summary>
+        private void FlipToBack()
+        {
+            if (_isAnimating) return;
+
+            _isAnimating = true;
+            var storyboard = (Storyboard)FindResource("FlipToBack");
+            
+            // Clone to avoid issues with reusing the storyboard
+            _currentStoryboard = storyboard.Clone();
+            
+            _currentStoryboard.Completed += (s, e) =>
+            {
+                _isAnimating = false;
+                _isAnswerRevealed = true;
+                BtnRight.IsEnabled = true;
+                BtnWrong.IsEnabled = true;
+            };
+            _currentStoryboard.Begin(this);
+        }
+
+        /// <summary>
+        /// Plays the flip animation to show the front of the card again.
+        /// </summary>
+        private void FlipToFront()
+        {
+            if (_isAnimating) return;
+
+            _isAnimating = true;
+            var storyboard = (Storyboard)FindResource("FlipToFront");
+            
+            // Clone to avoid issues with reusing the storyboard
+            _currentStoryboard = storyboard.Clone();
+            
+            _currentStoryboard.Completed += (s, e) =>
+            {
+                _isAnimating = false;
+                _isAnswerRevealed = false;
+            };
+            _currentStoryboard.Begin(this);
+        }
+
+        /// <summary>
+        /// Resets the card to show the front side without animation.
+        /// </summary>
+        private void ResetCardToFront()
+        {
+            // Remove the currently running storyboard to release its hold on animated properties
+            if (_currentStoryboard != null)
+            {
+                _currentStoryboard.Remove(this);
+                _currentStoryboard = null;
+            }
+            
+            // Reset state flags
             _isAnswerRevealed = false;
-            txtbBackText.Visibility = Visibility.Hidden;
-            ClickToRevealText.Visibility = Visibility.Visible;
+            _isAnimating = false;
+            
+            // Force immediate visibility states (not animated)
+            CardFront.Visibility = Visibility.Visible;
+            CardBack.Visibility = Visibility.Collapsed;
+            
+            // Reset transforms to initial state
+            CardFrontTransform.ScaleX = 1;
+            CardBackTransform.ScaleX = 0;
         }
 
         /// <summary>
@@ -113,9 +204,7 @@ namespace StudySnap
             try
             {
                 List<StudySessionResult> history = repository.LoadSessionResults(path);
-
                 history.Add(result);
-
                 repository.SaveSessionResults(history, path);
             }
             catch (Exception ex)
@@ -140,7 +229,7 @@ namespace StudySnap
         private void RightButton_Click(object sender, RoutedEventArgs e)
         {
             _session.RecordAnswer(true);
-            UpdateUI();
+            AdvanceToNextCard();
         }
 
         /// <summary>
@@ -150,23 +239,51 @@ namespace StudySnap
         private void WrongButton_Click(object sender, RoutedEventArgs e)
         {
             _session.RecordAnswer(false);
-            UpdateUI();
+            AdvanceToNextCard();
+        }
+
+        /// <summary>
+        /// Advances to the next card, flipping back to front first if the answer is revealed.
+        /// </summary>
+        private void AdvanceToNextCard()
+        {
+            if (_isAnswerRevealed && !_isAnimating)
+            {
+                // Flip back to front first, then update UI after animation completes
+                _isAnimating = true;
+                var storyboard = (Storyboard)FindResource("FlipToFront");
+                _currentStoryboard = storyboard.Clone();
+
+                _currentStoryboard.Completed += (s, e) =>
+                {
+                    _isAnimating = false;
+                    _isAnswerRevealed = false;
+                    _currentStoryboard = null;
+                    UpdateUI();
+                };
+                _currentStoryboard.Begin(this);
+            }
+            else
+            {
+                UpdateUI();
+            }
         }
 
         /// <summary>
         /// Handles the MouseDown event on the flashcard area.
-        /// Reveals the answer (back of the card) and enables the response buttons.
+        /// Toggles the flip animation to reveal/hide the answer.
         /// </summary>
         private void Card_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (_isAnimating) return;
+
             if (!_isAnswerRevealed)
             {
-                _isAnswerRevealed = true;
-                txtbBackText.Visibility = Visibility.Visible;
-                ClickToRevealText.Visibility = Visibility.Hidden;
-                // Enable the answer buttons
-                BtnRight.IsEnabled = true;
-                BtnWrong.IsEnabled = true;
+                FlipToBack();
+            }
+            else
+            {
+                FlipToFront();
             }
         }
 

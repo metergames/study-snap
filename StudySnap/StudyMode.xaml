@@ -6,113 +6,201 @@
         xmlns:local="clr-namespace:StudySnap"
         xmlns:xrpb="http://XamlRadialProgressBar/DotNet"
         mc:Ignorable="d"
-        Title="Study Mode" Height="700" Width="900" Background="#F6F6F8"
+        Title="Study Mode" Height="700" Width="900" Background="Transparent"
         MinWidth="600" MinHeight="500"
         WindowStartupLocation="CenterOwner" Closing="StudyModeWindowClosing"
-        MouseDown="Window_MouseDown">
-    <Grid>
-        <!-- Define Rows -->
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+        MouseDown="Window_MouseDown" WindowStyle="None" AllowsTransparency="True">
 
-        <!-- Header Section -->
-        <Grid Grid.Row="0" Margin="30,20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+    <Window.Resources>
+        <!-- Card flip animation storyboards -->
+        <Storyboard x:Key="FlipToBack">
+            <DoubleAnimation Storyboard.TargetName="CardFrontTransform"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="1" To="0" Duration="0:0:0.15"/>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="CardFront" Storyboard.TargetProperty="Visibility" BeginTime="0:0:0.15">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="CardBack" Storyboard.TargetProperty="Visibility" BeginTime="0:0:0.15">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimation Storyboard.TargetName="CardBackTransform"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="0" To="1" Duration="0:0:0.15" BeginTime="0:0:0.15"/>
+        </Storyboard>
 
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <Image x:Name="imgDeckIcon" Width="24" Height="24"
-                       Margin="0,0,10,0" RenderOptions.BitmapScalingMode="NearestNeighbor"
-                       VerticalAlignment="Center"/>
+        <Storyboard x:Key="FlipToFront">
+            <DoubleAnimation Storyboard.TargetName="CardBackTransform"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="1" To="0" Duration="0:0:0.15"/>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="CardBack" Storyboard.TargetProperty="Visibility" BeginTime="0:0:0.15">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="CardFront" Storyboard.TargetProperty="Visibility" BeginTime="0:0:0.15">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimation Storyboard.TargetName="CardFrontTransform"
+                             Storyboard.TargetProperty="ScaleX"
+                             From="0" To="1" Duration="0:0:0.15" BeginTime="0:0:0.15"/>
+        </Storyboard>
+    </Window.Resources>
 
-                <TextBlock x:Name="txtbDeckTitle" Text="Deck: Name" FontSize="18" FontWeight="Bold" Foreground="#1C2B45"/>
-            </StackPanel>
+    <Border Background="#F6F6F8" CornerRadius="15">
+        <Border.Clip>
+            <RectangleGeometry RadiusX="15" RadiusY="15" Rect="0,0,900,700"/>
+        </Border.Clip>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock x:Name="txtbCardCounter" Text="Card - of -" VerticalAlignment="Center" Foreground="#546E7A" Margin="0,0,15,0" FontWeight="SemiBold"/>
+            <!-- Header Section -->
+            <Grid Grid.Row="0" Margin="30,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-                <xrpb:RadialProgressBar x:Name="WinFormsCircularBar"
-			                            Width="40" Height="40"
-			                            Foreground="#0F49BD"
-                                        ArcWidth="5"/>
-            </StackPanel>
-        </Grid>
-
-        <!-- Flashcard Display Area -->
-        <Border Grid.Row="1" Background="White"
-                CornerRadius="20" Margin="40,20" Padding="0,40"
-                MouseLeftButtonDown="Card_MouseDown" Cursor="Hand">
-            <Border.Effect>
-                <DropShadowEffect Color="Gray" BlurRadius="20" ShadowDepth="5" Opacity="0.1"/>
-            </Border.Effect>
-            <!-- Flashcard Content -->
-            <Viewbox Stretch="Uniform">
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <!-- front of card content (question) -->
-                    <TextBlock Text="FRONT" Foreground="#9DA8B8" FontSize="12" FontWeight="Bold"
-                   HorizontalAlignment="Center"/>
-                    <TextBlock x:Name="txtbFrontText" Text="Parler" FontSize="32" FontWeight="Bold" Foreground="#1C2B45"
-                   HorizontalAlignment="Center" Margin="30,10,30,30"
-                           TextWrapping="Wrap"/>
-
-                    <!-- Border to split sides -->
-                    <Border Height="1" Background="#E0E6ED" MaxWidth="300" Margin="0,0,0,30"/>
-
-                    <!-- Back of card content (answer) -->
-                    <TextBlock Text="BACK" Foreground="#9DA8B8" FontSize="12" FontWeight="Bold"
-                   HorizontalAlignment="Center"/>
-                    <TextBlock x:Name="txtbBackText" Text="To speak" FontSize="32" FontWeight="Bold" Foreground="#1C2B45"
-                   HorizontalAlignment="Center" Margin="30,10,30,30"
-                           TextWrapping="Wrap"/>
-
-                    <TextBlock x:Name="ClickToRevealText" Text="(Click card to reveal)" Foreground="#B0BEC5"
-                           FontSize="14" HorizontalAlignment="Center" Margin="0,20,0,0"/>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image x:Name="imgDeckIcon" Width="24" Height="24"
+                           Margin="0,0,10,0" RenderOptions.BitmapScalingMode="NearestNeighbor"
+                           VerticalAlignment="Center"/>
+                    <TextBlock x:Name="txtbDeckTitle" FontSize="18" FontWeight="Bold" Foreground="#1C2B45"/>
                 </StackPanel>
-            </Viewbox>
-        </Border>
 
-        <!-- Action Buttons Panel -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal"
-            HorizontalAlignment="Center" Margin="0,20,0,40">
-            <!-- Right Button -->
-            <Button x:Name="BtnRight"
-            Style="{StaticResource StudyButtonStyle}"
-            Content="I got it right"
-            Foreground="#2E7D32"
-            Background="#E8F5E9"
-            Click="RightButton_Click"/>
-            <!-- Wrong Button -->
-            <Button x:Name="BtnWrong"
-            Style="{StaticResource StudyButtonStyle}"
-            Content="I got it wrong"
-            Foreground="#C62828"
-            Background="#FFEBEE"
-            Click="WrongButton_Click"/>
-        </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="txtbCardCounter" VerticalAlignment="Center" Foreground="#546E7A" Margin="0,0,15,0" FontWeight="SemiBold"/>
+                    <xrpb:RadialProgressBar x:Name="WinFormsCircularBar"
+                                            Width="40" Height="40"
+                                            Foreground="#0F49BD"
+                                            ArcWidth="5"/>
+                </StackPanel>
+            </Grid>
 
-        <!-- Footer Section -->
-        <Grid Grid.Row="3" Margin="40,0,40,20">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <TextBlock Foreground="#1C2B45" FontWeight="Bold">
-            Score: <Run x:Name="ScoreRun" Text="80%" FontWeight="Normal"/>
-                </TextBlock>
-                <TextBlock Foreground="#1C2B45" FontWeight="Bold" Margin="20,0,0,0">
-            Correct: <Run x:Name="CorrectRun" Text="4" FontWeight="Normal"/>
-                </TextBlock>
-                <TextBlock Foreground="#1C2B45" FontWeight="Bold" Margin="20,0,0,0">
-            Incorrect: <Run x:Name="IncorrectRun" Text="1" FontWeight="Normal"/>
-                </TextBlock>
+            <!-- Flashcard Container -->
+            <Grid Grid.Row="1" Margin="40,20" MouseLeftButtonDown="Card_MouseDown" Background="Transparent">
+                
+                <!-- Front of Card -->
+                <Border x:Name="CardFront" Background="White" CornerRadius="20" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
+                    <Border.RenderTransform>
+                        <ScaleTransform x:Name="CardFrontTransform" ScaleX="1"/>
+                    </Border.RenderTransform>
+                    <Border.Effect>
+                        <DropShadowEffect Color="Gray" BlurRadius="20" ShadowDepth="5" Opacity="0.1"/>
+                    </Border.Effect>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Card Side Label -->
+                        <Border Grid.Row="0" Background="#E7EEFD" CornerRadius="10" Padding="12,6" 
+                                HorizontalAlignment="Center" Margin="0,25,0,0">
+                            <TextBlock Text="QUESTION" Foreground="#0F49BD" FontSize="11" FontWeight="Bold"/>
+                        </Border>
+
+                        <!-- Card Content with ScrollViewer -->
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" 
+                                      HorizontalScrollBarVisibility="Disabled" Margin="40,20"
+                                      IsHitTestVisible="False">
+                            <ScrollViewer.Resources>
+                                <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ModernScrollBarStyle}"/>
+                            </ScrollViewer.Resources>
+                            <TextBlock x:Name="txtbFrontText" FontSize="28" FontWeight="SemiBold" Foreground="#1C2B45"
+                                       TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" LineHeight="38"/>
+                        </ScrollViewer>
+
+                        <!-- Click Hint -->
+                        <TextBlock Grid.Row="2" Text="Click card to reveal answer" Foreground="#9DA8B8" 
+                                   FontSize="13" FontWeight="Medium" HorizontalAlignment="Center" Margin="0,0,0,25"/>
+                    </Grid>
+                </Border>
+
+                <!-- Back of Card -->
+                <Border x:Name="CardBack" Background="#1C2B45" CornerRadius="20" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
+                    <Border.RenderTransform>
+                        <ScaleTransform x:Name="CardBackTransform" ScaleX="0"/>
+                    </Border.RenderTransform>
+                    <Border.Effect>
+                        <DropShadowEffect Color="Gray" BlurRadius="20" ShadowDepth="5" Opacity="0.15"/>
+                    </Border.Effect>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Card Side Label - matching app's blue accent -->
+                        <Border Grid.Row="0" Background="#0F49BD" CornerRadius="10" Padding="12,6" 
+                                HorizontalAlignment="Center" Margin="0,25,0,0">
+                            <TextBlock Text="ANSWER" Foreground="White" FontSize="11" FontWeight="Bold"/>
+                        </Border>
+
+                        <!-- Card Content with ScrollViewer -->
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" 
+                                      HorizontalScrollBarVisibility="Disabled" Margin="40,20"
+                                      IsHitTestVisible="False">
+                            <TextBlock x:Name="txtbBackText" FontSize="28" FontWeight="SemiBold" Foreground="#E2E8F0"
+                                       TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"
+                                       HorizontalAlignment="Center" LineHeight="38"/>
+                        </ScrollViewer>
+
+                        <!-- Click to flip back hint -->
+                        <TextBlock Grid.Row="2" Text="Click card to see question" Foreground="#8899A6" 
+                                   FontSize="13" FontWeight="Medium" HorizontalAlignment="Center" Margin="0,0,0,25"/>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Action Buttons Panel -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,30">
+                <!-- Right Button -->
+                <Button x:Name="BtnRight"
+                        Style="{StaticResource StudyButtonStyle}"
+                        Content="✓  I got it right"
+                        Foreground="#2E7D32"
+                        Background="#E8F5E9"
+                        Click="RightButton_Click"/>
+                <!-- Wrong Button -->
+                <Button x:Name="BtnWrong"
+                        Style="{StaticResource StudyButtonStyle}"
+                        Content="✗  I got it wrong"
+                        Foreground="#C62828"
+                        Background="#FFEBEE"
+                        Click="WrongButton_Click"/>
             </StackPanel>
 
-            <TextBlock Text="End Session" HorizontalAlignment="Right"
-                       Foreground="#1C2B45" FontWeight="Bold" Cursor="Hand"
-                       MouseLeftButtonDown="EndSession_Click"/>
+            <!-- Footer Section -->
+            <Grid Grid.Row="3" Margin="40,0,40,20">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Border Background="#F0F0F5" CornerRadius="8" Padding="12,6" Margin="0,0,10,0">
+                        <TextBlock Foreground="#1C2B45" FontWeight="SemiBold" FontSize="13">
+                            Score: <Run x:Name="ScoreRun" FontWeight="Bold" Foreground="#0F49BD"/>
+                        </TextBlock>
+                    </Border>
+                    <Border Background="#E8F5E9" CornerRadius="8" Padding="12,6" Margin="0,0,10,0">
+                        <TextBlock Foreground="#2E7D32" FontWeight="SemiBold" FontSize="13">
+                            ✓ <Run x:Name="CorrectRun" FontWeight="Bold"/>
+                        </TextBlock>
+                    </Border>
+                    <Border Background="#FFEBEE" CornerRadius="8" Padding="12,6">
+                        <TextBlock Foreground="#C62828" FontWeight="SemiBold" FontSize="13">
+                            ✗ <Run x:Name="IncorrectRun" FontWeight="Bold"/>
+                        </TextBlock>
+                    </Border>
+                </StackPanel>
+
+                <Button Content="End Session" HorizontalAlignment="Right"
+                        Style="{StaticResource TextOnlyButton}"
+                        Foreground="#C62828" FontSize="13"
+                        Click="EndSession_Click"/>
+            </Grid>
         </Grid>
-    </Grid>
+    </Border>
 </Window>

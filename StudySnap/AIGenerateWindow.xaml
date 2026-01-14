@@ -1,0 +1,565 @@
+﻿<Window x:Class="StudySnap.AIGenerateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="AI Flashcard Generator" Height="Auto" Width="550"
+        SizeToContent="Height" MaxHeight="750"
+        ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterOwner"
+        Background="Transparent" AllowsTransparency="True"
+        ShowInTaskbar="False" MouseDown="Window_MouseDown">
+    <Window.Resources>
+        <!-- Drop Shadow Effect -->
+        <DropShadowEffect x:Key="DropShadow"
+                          Color="#000000"
+                          Opacity="0.1"
+                          BlurRadius="8"
+                          ShadowDepth="2"
+                          Direction="270"/>
+        <!-- Modern ComboBox Style -->
+        <Style x:Key="ModernComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#1F2937"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton x:Name="ToggleButton"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                        ClickMode="Press">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="Border"
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="8">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <ContentPresenter Grid.Column="0"
+                                                                Content="{TemplateBinding Content}"
+                                                                Margin="12,8"
+                                                                VerticalAlignment="Center"
+                                                                HorizontalAlignment="Left"/>
+                                                <Path Grid.Column="1"
+                                                      x:Name="Arrow"
+                                                      Data="M 0 0 L 4 4 L 8 0 Z"
+                                                      Fill="#6B7280"
+                                                      Margin="0,0,12,0"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Border" Property="Background" Value="#F9FAFB"/>
+                                                <Setter TargetName="Border" Property="BorderBrush" Value="#9CA3AF"/>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="Border" Property="BorderBrush" Value="#135BEC"/>
+                                                <Setter TargetName="Arrow" Property="Fill" Value="#135BEC"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <ContentPresenter x:Name="ContentSite"
+                                            Content="{TemplateBinding SelectionBoxItem}"
+                                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                            ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                            Margin="12,8,32,8"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Left"
+                                            IsHitTestVisible="False"/>
+                            <Popup x:Name="Popup"
+                                   Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Border x:Name="DropDownBorder"
+                                        Background="White"
+                                        BorderBrush="#E5E7EB"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Margin="0,4,0,0"
+                                        Effect="{StaticResource DropShadow}">
+                                    <ScrollViewer SnapsToDevicePixels="True"
+                                                Margin="4">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ComboBoxItem Style -->
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#1F2937"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="6"
+                                Margin="2">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#EEF2FF"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#DBEAFE"/>
+                                <Setter Property="Foreground" Value="#135BEC"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    
+    <Border Background="White" CornerRadius="20" BorderBrush="#E5E7EB" BorderThickness="1"
+            Padding="25">
+        <StackPanel>
+            <!-- Header -->
+            <StackPanel Margin="0,0,0,15">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Images/robot-blue.png" Width="24" Height="24" 
+                           VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBlock Text="AI Flashcard Generator" FontSize="22" FontWeight="Bold"
+                               Foreground="#111827" VerticalAlignment="Center"/>
+                </StackPanel>
+                <TextBlock x:Name="txtHeaderSubtitle" 
+                           Text="Enter your study material and let AI create flashcards for you"
+                           FontSize="13" Foreground="#6B7280" Margin="0,5,0,0"/>
+            </StackPanel>
+
+            <!-- API Key Section (collapsible) -->
+            <Border x:Name="apiKeySection" Background="#FEF3C7"
+                    CornerRadius="10" Padding="15" Margin="0,0,0,15">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <Image Source="/Images/certificate-blue.png" Width="16" Height="16" 
+                               VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="OpenAI API Key Required" FontWeight="SemiBold"
+                                   Foreground="#92400E" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock Text="Enter your API key to enable AI generation. Your key is stored locally."
+                               FontSize="12" Foreground="#A16207" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="txtApiKey" Grid.Column="0"
+                                 FontSize="13" Padding="10" Height="38"
+                                 VerticalContentAlignment="Center"
+                                 BorderThickness="1" BorderBrush="#D1D5DB"
+                                 Background="White">
+                            <TextBox.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="8"/>
+                                </Style>
+                            </TextBox.Resources>
+                        </TextBox>
+                        <Button x:Name="btnSaveKey" Grid.Column="1" Content="Save"
+                                Click="SaveApiKeyClick" Width="70" Height="38" Margin="10,0,0,0"
+                                BorderThickness="0" Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#F59E0B"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#D97706"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button x:Name="btnCancelApiKey" Grid.Column="2" Content="Cancel"
+                                Click="CancelApiKeyClick" Width="70" Height="38" Margin="5,0,0,0"
+                                BorderThickness="0" Cursor="Hand" Visibility="Collapsed">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#E5E7EB"/>
+                                    <Setter Property="Foreground" Value="#374151"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#D1D5DB"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </Border>
+            
+            <!-- Change API Key Button (shown when key is saved) -->
+            <Button x:Name="btnChangeApiKey" Click="ChangeApiKeyClick"
+                    HorizontalAlignment="Left" Margin="0,0,0,15"
+                    Visibility="Collapsed" Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/certificate-blue.png" Width="14" Height="14" 
+                                   VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock x:Name="btnText" Text="Change API Key" FontSize="12" 
+                                       Foreground="#135BEC" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="btnText" Property="TextDecorations" Value="Underline"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <!-- File Upload Section -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Text="Upload Notes File (Optional)" FontWeight="SemiBold"
+                           Foreground="#374151" Margin="0,0,0,8"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Drag and Drop Zone -->
+                    <Border x:Name="dropZone" Grid.Column="0"
+                            Background="#F9FAFB" BorderBrush="#D1D5DB"
+                            BorderThickness="2" CornerRadius="10"
+                            AllowDrop="True" Height="60"
+                            DragEnter="DropZone_DragEnter"
+                            DragLeave="DropZone_DragLeave"
+                            DragOver="DropZone_DragOver"
+                            Drop="DropZone_Drop">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="BorderBrush" Value="#9CA3AF"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <StackPanel x:Name="dropZoneDefaultContent" Orientation="Horizontal" 
+                                        HorizontalAlignment="Center">
+                                <Image Source="/Images/file-text-blue.png" Width="18" Height="18" 
+                                       VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock Text="Drop PDF, DOCX, or TXT here"
+                                           FontSize="13" Foreground="#6B7280"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel x:Name="dropZoneLoadedContent" Visibility="Collapsed"
+                                        HorizontalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Image Source="/Images/file-text-blue.png" Width="16" Height="16" 
+                                           VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                    <TextBlock Text="File loaded:" FontSize="12" Foreground="#6B7280"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <TextBlock x:Name="txtLoadedFileName" 
+                                           Text="" FontSize="11" Foreground="#10B981"
+                                           FontWeight="SemiBold" HorizontalAlignment="Center"
+                                           Margin="0,3,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Browse Button -->
+                    <Button x:Name="btnBrowseFile" Grid.Column="1" Content="Browse..."
+                            Click="BrowseFileClick" Width="90" Height="40" Margin="10,0,0,0"
+                            BorderThickness="0" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#E5E7EB"/>
+                                <Setter Property="Foreground" Value="#374151"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#D1D5DB"/>
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Background" Value="#F3F4F6"/>
+                                        <Setter Property="Foreground" Value="#9CA3AF"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+                
+                <!-- Extraction Status -->
+                <StackPanel x:Name="extractionStatusPanel" Orientation="Horizontal" 
+                            Margin="0,8,0,0" Visibility="Collapsed">
+                    <Image Source="/Images/hourglass-blue.png" Width="14" Height="14" 
+                           VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="txtExtractionStatus" Text="Extracting text..."
+                               FontSize="12" Foreground="#6B7280" FontStyle="Italic"
+                               VerticalAlignment="Center"/>
+                    <Button x:Name="btnCancelExtraction" Content="Cancel" 
+                            Click="CancelExtractionClick"
+                            Margin="10,0,0,0" Padding="8,2" FontSize="11"
+                            Background="Transparent" Foreground="#EF4444"
+                            BorderThickness="0" Cursor="Hand"/>
+                </StackPanel>
+                
+                <!-- Large Document Warning -->
+                <Border x:Name="largeDocWarning" Background="#FEF3C7" CornerRadius="6"
+                        Padding="10" Margin="0,8,0,0" Visibility="Collapsed">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/file-text-blue.png" Width="14" Height="14" 
+                               VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="Large document detected. Text will be summarized before generating flashcards."
+                                   FontSize="11" Foreground="#92400E" TextWrapping="Wrap"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!-- Topic Input -->
+            <StackPanel Margin="0,5,0,0">
+                <TextBlock Text="Topic / Study Material" FontWeight="SemiBold"
+                           Foreground="#374151" Margin="0,0,0,8"/>
+                <Border Background="#F9FAFB" BorderBrush="#E5E7EB"
+                        BorderThickness="1" CornerRadius="10" Height="140">
+                    <TextBox x:Name="txtTopicContent"
+                             Background="Transparent" BorderThickness="0"
+                             TextWrapping="Wrap" AcceptsReturn="True"
+                             FontSize="14" Foreground="#1F2937"
+                             VerticalScrollBarVisibility="Auto"
+                             Padding="12"/>
+                </Border>
+                <TextBlock x:Name="txtCharCount" Text="" FontSize="11" 
+                           Foreground="#9CA3AF" Margin="0,4,0,0"
+                           HorizontalAlignment="Right"/>
+            </StackPanel>
+
+            <!-- Number of Cards Selector -->
+            <Grid Margin="0,15,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="Number of Cards:" FontWeight="SemiBold"
+                           Foreground="#374151" VerticalAlignment="Center" Margin="0,0,15,0"/>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <ComboBox x:Name="cmbCardCount" SelectedIndex="1" Width="100" Height="38"
+                              Style="{StaticResource ModernComboBoxStyle}">
+                        <ComboBoxItem Content="5"/>
+                        <ComboBoxItem Content="10"/>
+                        <ComboBoxItem Content="15"/>
+                        <ComboBoxItem Content="20"/>
+                        <ComboBoxItem Content="25"/>
+                    </ComboBox>
+                    <TextBlock Text="(AI may generate approximately this amount)"
+                               FontSize="11" Foreground="#9CA3AF" FontStyle="Italic"
+                               VerticalAlignment="Center" Margin="10,0,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Model Selection -->
+            <Grid Margin="0,15,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <RadioButton x:Name="rbBasic" Grid.Column="0" IsChecked="True"
+                             GroupName="ModelType" Cursor="Hand">
+                    <RadioButton.Template>
+                        <ControlTemplate TargetType="RadioButton">
+                            <Border x:Name="border" Background="#F3F4F6" CornerRadius="10"
+                                    Padding="15,12" Margin="0,0,5,0" BorderThickness="2"
+                                    BorderBrush="Transparent">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Images/rocket-launch-blue.png" Width="18" Height="18" 
+                                           VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <StackPanel>
+                                        <TextBlock Text="Basic" FontWeight="Bold" FontSize="14"
+                                                   Foreground="#374151"/>
+                                        <TextBlock Text="GPT-4o-mini • Faster &amp; cheaper"
+                                                   FontSize="11" Foreground="#6B7280" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#EEF2FF"/>
+                                    <Setter TargetName="border" Property="BorderBrush" Value="#135BEC"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#E5E7EB"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </RadioButton.Template>
+                </RadioButton>
+
+                <RadioButton x:Name="rbAdvanced" Grid.Column="1"
+                             GroupName="ModelType" Cursor="Hand">
+                    <RadioButton.Template>
+                        <ControlTemplate TargetType="RadioButton">
+                            <Border x:Name="border" Background="#F3F4F6" CornerRadius="10"
+                                    Padding="15,12" Margin="5,0,0,0" BorderThickness="2"
+                                    BorderBrush="Transparent">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Images/brain-blue.png" Width="18" Height="18" 
+                                           VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <StackPanel>
+                                        <TextBlock Text="Advanced" FontWeight="Bold" FontSize="14"
+                                                   Foreground="#374151"/>
+                                        <TextBlock Text="GPT-4o • Higher quality"
+                                                   FontSize="11" Foreground="#6B7280" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#EEF2FF"/>
+                                    <Setter TargetName="border" Property="BorderBrush" Value="#135BEC"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#E5E7EB"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </RadioButton.Template>
+                </RadioButton>
+            </Grid>
+
+            <!-- Action Buttons -->
+            <Grid Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Loading indicator -->
+                <StackPanel x:Name="loadingPanel" Grid.Column="0" Orientation="Horizontal"
+                            Visibility="Collapsed" VerticalAlignment="Center">
+                    <Image Source="/Images/hourglass-blue.png" Width="14" Height="14" 
+                           VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBlock x:Name="txtLoadingMessage" Text="Generating flashcards..." 
+                               FontSize="13" Foreground="#6B7280" FontStyle="Italic"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Button x:Name="btnCancel" Content="Cancel" Click="CancelClick" Grid.Column="1"
+                        Width="90" Height="40" Margin="0,0,10,0" Cursor="Hand">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="#6B7280"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="#374151"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button x:Name="btnGenerate" Content="Generate Flashcards"
+                        Click="GenerateClick" Grid.Column="2"
+                        Width="160" Height="40" BorderThickness="0" Cursor="Hand">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#135BEC"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="20">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#0F49BD"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Background" Value="#9CA3AF"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </StackPanel>
+    </Border>
+</Window>

@@ -272,5 +272,27 @@ namespace StudySnap
             if (e.ChangedButton == MouseButton.Left)
                 this.DragMove();
         }
+
+        /// <summary>
+        /// Handles the Click event for the AI Generate button.
+        /// Opens the AI generation dialog and adds any generated cards to the deck.
+        /// </summary>
+        private void AIGenerateClick(object sender, RoutedEventArgs e)
+        {
+            AIGenerateWindow aiWindow = new AIGenerateWindow(_currentDeck.Name);
+            aiWindow.Owner = this;
+
+            if (aiWindow.ShowDialog() == true)
+            {
+                foreach (var card in aiWindow.GeneratedFlashcards)
+                {
+                    _currentDeck.AddCard(card);
+                }
+
+                _unsavedChanges = true;
+                LoadCards();
+                ClearForm();
+            }
+        }
     }
 }

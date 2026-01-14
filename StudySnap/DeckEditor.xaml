@@ -76,7 +76,7 @@
         <!-- Deck Panel -->
         <Rectangle Grid.Row="1" Grid.Column="0" Fill="White"
                    RadiusX="25" RadiusY="25" HorizontalAlignment="Stretch"
-                   VerticalAlignment="Stretch" Margin="20,50,15,20"/>
+                   VerticalAlignment="Stretch" Margin="20,85,15,20"/>
 
         <Grid Grid.Column="0" Grid.Row="1" Margin="20,0,15,28">
             <Grid.RowDefinitions>
@@ -89,8 +89,41 @@
             <Button Grid.Row="0" Style="{StaticResource RoundedButton15}"
                     Content="Add New Card" Height="30" BorderThickness="0"
                     Background="#135BEC" Foreground="White"
-                    FontSize="11" FontWeight="Bold" Margin="0,10"
+                    FontSize="11" FontWeight="Bold" Margin="0,10,0,5"
                     VerticalContentAlignment="Center" Click="AddNewCardClick"/>
+
+            <!-- AI Generate Button -->
+            <Button Grid.Row="1" Height="30" BorderThickness="0"
+                    FontSize="11" FontWeight="Bold" Margin="0,0,0,10"
+                    VerticalContentAlignment="Center" Click="AIGenerateClick"
+                    Cursor="Hand">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#8B5CF6"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="15">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock Text="✨" Margin="0,0,6,0"/>
+                                            <TextBlock Text="AI Generate" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#7C3AED"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#6D28D9"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
 
             <ListBox Grid.Row="2" x:Name="lstbCards" SelectionMode="Single"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -98,7 +131,7 @@
                      ItemContainerStyle="{StaticResource CardItemContainerStyle}"
                      Background="Transparent" BorderThickness="0"
                      SelectionChanged="CardSelectionChanged"
-                     Padding="5,0" Margin="0,2,0,0">
+                     Padding="5,-10,5,0" Margin="0,12,0,0">
 
                 <ListBox.Resources>
                     <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ModernScrollBarStyle}"/>
