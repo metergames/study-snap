@@ -308,5 +308,19 @@ namespace StudySnap
                 btnStartStudy.IsEnabled = true;
             else btnStartStudy.IsEnabled = false;
         }
+
+        /// <summary>
+        /// Handles the Click event for the "About" button.
+        /// Opens the About window.
+        /// </summary>
+        private void AboutButton_Click(object sender, RoutedEventArgs e)
+        {
+            AboutWindow aboutWindow = new AboutWindow();
+            aboutWindow.Owner = this;
+
+            this.Opacity = 0.4;
+            aboutWindow.ShowDialog();
+            this.Opacity = 1;
+        }
     }
 }

@@ -1,0 +1,67 @@
+<Window x:Class="StudySnap.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="About StudySnap" Height="400" Width="400"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent">
+
+    <Border Background="White" CornerRadius="20" Padding="30">
+        <Border.Effect>
+            <DropShadowEffect Color="Gray" BlurRadius="20" ShadowDepth="3" Opacity="0.2"/>
+        </Border.Effect>
+        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header with Logo -->
+            <StackPanel Grid.Row="0" HorizontalAlignment="Center">
+                <Border Width="70" Height="70" CornerRadius="35" Background="#E7EEFD" 
+                        HorizontalAlignment="Center" Margin="0,0,0,15">
+                    <Image Source="/Images/StudySnap Logo 30.png" Width="40" Height="40"
+                           RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Border>
+                
+                <TextBlock Text="StudySnap" FontSize="24" FontWeight="Bold" 
+                           Foreground="#111827" HorizontalAlignment="Center"/>
+                
+                <TextBlock Text="Version 1.0.0" FontSize="12" Foreground="#6B7280" 
+                           HorizontalAlignment="Center" Margin="0,5,0,0"/>
+            </StackPanel>
+
+            <!-- About Content -->
+            <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Developed by" FontSize="12" Foreground="#6B7280" 
+                           HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                
+                <TextBlock Text="Meter Games" FontSize="18" FontWeight="SemiBold" 
+                           Foreground="#135BEC" HorizontalAlignment="Center"/>
+                
+                <Border Background="#F9FAFB" CornerRadius="10" Padding="15,10" 
+                        Margin="0,20,0,0" HorizontalAlignment="Center">
+                    <TextBlock Text="A flashcard study tool designed to help students organize and master their learning materials."
+                               FontSize="12" Foreground="#4B5563" TextWrapping="Wrap" 
+                               TextAlignment="Center" MaxWidth="280"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Footer -->
+            <StackPanel Grid.Row="2" HorizontalAlignment="Center">
+                <TextBlock Text="&#169; 2026 Meter Games. All rights reserved." 
+                           FontSize="11" Foreground="#9CA3AF" HorizontalAlignment="Center"
+                           Margin="0,0,0,15"/>
+
+                <Button Content="Close" Style="{StaticResource RoundedButton15}"
+                        Width="100" Height="32" Background="#135BEC" Foreground="White"
+                        FontWeight="SemiBold" FontSize="12" BorderThickness="0"
+                        Click="CloseButton_Click"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

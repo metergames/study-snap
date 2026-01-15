@@ -21,16 +21,26 @@
         <!-- Background -->
         <Rectangle Grid.Row="1" Grid.ColumnSpan="2" Fill="#F6F6F8"/>
 
-
         <!-- Title bar -->
-        <StackPanel Orientation="Horizontal" Grid.Row="0"
-                    Grid.ColumnSpan="2" Margin="35,5">
-            <Image Height="30" Width="30" Source="/Images/StudySnap Logo 30.png"/>
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Margin="35,5">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Image Height="30" Width="30" Source="/Images/StudySnap Logo 30.png"/>
 
-            <Label Content="StudySnap" Margin="7,0,0,0"
-                   VerticalAlignment="Center" FontSize="20"
-                   FontFamily="Segoe UI Black"/>
-        </StackPanel>
+                <Label Content="StudySnap" Margin="7,0,0,0"
+                       VerticalAlignment="Center" FontSize="20"
+                       FontFamily="Segoe UI Black"/>
+            </StackPanel>
+            
+            <!-- About Button -->
+            <Button HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Style="{StaticResource TextOnlyButton}" Cursor="Hand"
+                    ToolTip="About StudySnap" Click="AboutButton_Click">
+                <Border Width="30" Height="30" CornerRadius="15" Background="#F3F4F6">
+                    <TextBlock Text="?" FontSize="16" FontWeight="Bold" Foreground="#6B7280"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+            </Button>
+        </Grid>
 
         <!-- Deck Panel -->
         <Rectangle Grid.Row="1" Grid.Column="0" Fill="White"
